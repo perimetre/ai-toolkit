@@ -1,0 +1,12 @@
+{
+  "name": "ai-toolkit",
+  "owner": {
+    "name": "Yanik Proulx"
+  },
+  "metadata": {
+    "description": "Plugin marketplace for Claude and other AI tools",
+    "version": "0.1.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": []
+}
