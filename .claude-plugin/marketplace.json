@@ -8,5 +8,14 @@
     "version": "0.1.0",
     "pluginRoot": "./plugins"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "perimetre-brand",
+      "path": "./plugins/perimetre-brand",
+      "version": "1.0.0",
+      "description": "Keep Claude aligned with Périmètre's visual identity — colours, typography, and logo usage.",
+      "author": "Périmètre",
+      "tags": ["brand", "design", "perimetre"]
+    }
+  ]
 }

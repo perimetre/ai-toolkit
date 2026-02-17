@@ -1,0 +1,8 @@
+{
+  "name": "perimetre-brand",
+  "version": "1.0.0",
+  "description": "Keep Claude aligned with Périmètre's visual identity. Loads brand guidelines — colours, typography, and logo usage — so every deliverable looks and feels on-brand.",
+  "author": {
+    "name": "Périmètre"
+  }
+}
