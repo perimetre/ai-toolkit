@@ -30,7 +30,16 @@ Migrated from `framework/LLMs/` — each skill covers one technology area in det
 
 | Skill | Description |
 |-------|-------------|
-| `code-review` | Multi-agent PR review with confidence scoring and local pattern references |
+| `code-review` | Multi-agent code review with confidence scoring and local pattern references |
+
+Invoke `/perimetre-apps:code-review` in multiple modes:
+
+| Invocation | Mode |
+|---|---|
+| _(no args)_ | Uncommitted changes (`git diff`) |
+| `--pr` / `--pr 123` / bare integer | PR diff via `gh pr diff` |
+| `src/` _(any path)_ or `--all` | Review files at a path directly |
+| _(GitHub PR context)_ | Auto-detected — uses diff already in context |
 
 ### React & Performance (third-party)
 

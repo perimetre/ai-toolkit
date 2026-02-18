@@ -2,24 +2,66 @@
 
 Provide a comprehensive code review for the recent changes using Périmètre framework patterns.
 
+## Arguments
+
+| Invocation | Mode | Meaning |
+|---|---|---|
+| _(no args)_ | **changes** | Review current uncommitted changes (default) |
+| `--pr` | **pr** | Review the PR for the current branch (auto-detect) |
+| `--pr 123` or just `123` | **pr** | Review PR #123 specifically |
+| `src/components/` _(any path)_ | **path** | Review all code under that directory |
+| `--all` | **path** | Review the entire codebase |
+
+Disambiguation: bare integer → PR number; string with `/` or filesystem path → path mode.
+
 Follow these steps **precisely**:
 
-## Step 1: Examine Changes
+## Step 0: Determine Review Mode
 
-Use a Haiku agent to:
+Check in this order — first match wins:
 
-1. Run `git status` to see changed files
-2. Run `git diff` to see the actual changes
-3. Run `git log --oneline -5` to see recent commits
-4. Return a summary of which files changed and what patterns they involve
+1. **GitHub context**: Is a PR diff already present in the current conversation or environment (e.g., invoked as a GitHub PR review bot, or the user pasted/attached a diff)? → set mode to `github-pr`, proceed directly to Step 2 (skip Step 1 entirely)
+2. **Explicit args**: Classify the argument:
+   - `--pr` alone → `pr` mode (auto-detect current branch PR)
+   - `--pr 123` or bare integer `123` → `pr` mode for PR #123
+   - Any path (contains `/` or is a recognizable filesystem path) → `path` mode
+   - `--all` → `path` mode for the entire codebase
+3. **Default**: No args and no ambient context → `changes` mode
+
+> **Note:** Always use `gh pr diff` for PR mode — never `git diff main...HEAD`, which incorrectly assumes the base branch.
+
+## Step 1: Gather Review Scope
+
+**Skip this step entirely in `github-pr` mode** — the diff is already in context.
+
+Use a Haiku agent to gather scope based on mode:
+
+- **changes mode**: Run `git status`, `git diff`, and `git log --oneline -5`; return a summary of changed files and patterns involved
+- **pr mode**: Run `gh pr diff [number]` and `gh pr view [number] --json title,body,baseRefName,headRefName`; return a summary of the PR diff and metadata
+- **path mode**: Run `find [path] -type f` filtered to relevant extensions (`.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.css`) — or `git ls-files` for `--all`; return a list of files to review (agents will read them directly in Step 2)
 
 ## Step 2: Independent Code Review by Multiple Agents
 
-Launch **3 parallel agents** to independently review the changes:
+Launch parallel agents based on mode:
 
+**`github-pr` mode** (diff already in context, no local git):
+
+Launch **2 parallel agents**:
+- Use the `pattern-reviewer` agent to audit changes for Périmètre framework pattern violations
+- Use the `bug-scanner` agent to scan for large, obvious bugs in the diff
+
+**`changes` mode or `pr` mode** (diff available):
+
+Launch **3 parallel agents**:
 - Use the `pattern-reviewer` agent to audit changes for Périmètre framework pattern violations
 - Use the `bug-scanner` agent to scan for large, obvious bugs in the diff
 - Use the `history-reviewer` agent to check git history for regressions
+
+**`path` mode** (no diff — agents read files directly):
+
+Launch **2 parallel agents** (skip `history-reviewer` — `git blame` is meaningless without a diff):
+- Use the `pattern-reviewer` agent to audit the code at the given path for Périmètre framework pattern violations; instruct it to read files directly and **cap findings at 5 most critical issues**
+- Use the `bug-scanner` agent to scan the code at the given path for bugs; instruct it to read files directly and **cap findings at 5 most critical issues**
 
 Each agent returns a list of issues with the reason each was flagged.
 
@@ -48,6 +90,8 @@ Structure the final review as follows:
 
 ````markdown
 ### Code Review
+
+**Mode:** [Changes | PR #123 | Path: src/components/ | All code]
 
 Found [N] issues:
 
@@ -123,7 +167,9 @@ No issues found. Checked for:
 
 ## Examples of False Positives (DO NOT FLAG)
 
-- Pre-existing issues (not introduced in this PR)
+**For `changes` and `pr` mode:**
+
+- Pre-existing issues (not introduced in this diff)
 - Something that looks like a bug but is not
 - Pedantic nitpicks that a senior engineer wouldn't call out
 - Issues that linters/typecheckers/compilers would catch (missing imports, type errors, formatting)
@@ -131,6 +177,13 @@ No issues found. Checked for:
 - Issues called out in docs but explicitly silenced in code (lint ignore comments)
 - Intentional functionality changes related to the broader change
 - Real issues, but on lines the user did not modify
+
+**For `path` mode:**
+
+- Pre-existing issues are fair game — reviewing existing code at a path is the point
+- Still exclude: issues linters/typecheckers would catch automatically
+- Still exclude: issues explicitly silenced in code (lint ignore comments)
+- Still exclude: pedantic nitpicks a senior engineer wouldn't call out
 
 ---
 
@@ -154,6 +207,7 @@ Give this rubric **verbatim** to scoring agents:
 - **You must cite** each issue with pattern documentation evidence
 - **Use full git SHA** when linking to files: `https://github.com/perimetre/repo/blob/[full-sha]/path/file.ts#L10-L15`
 - **Provide context** when linking: Include 1 line before and after the problematic lines
+- **For PR mode**: use `gh pr diff` — never `git diff main...HEAD`, which incorrectly assumes the base branch
 
 ---
 

@@ -2,24 +2,61 @@
 
 Provide a comprehensive design system review for recent changes to `@perimetre/ui`.
 
+## Arguments
+
+| Invocation | Mode | Meaning |
+|---|---|---|
+| _(no args)_ | **changes** | Review current uncommitted changes (default) |
+| `--pr` | **pr** | Review the PR for the current branch (auto-detect) |
+| `--pr 123` or just `123` | **pr** | Review PR #123 specifically |
+| `src/components/` _(any path)_ | **path** | Review all code under that directory |
+| `--all` | **path** | Review the entire codebase |
+
+Disambiguation: bare integer → PR number; string with `/` or filesystem path → path mode.
+
 Follow these steps **precisely**:
 
-## Step 1: Examine Changes
+## Step 0: Determine Review Mode
 
-Use a Haiku agent to:
+Check in this order — first match wins:
 
-1. Run `git status` to see changed files
-2. Run `git diff` to see the actual changes
-3. Run `git log --oneline -5` to see recent commits
-4. Return a summary of which files changed (components, brand CSS, token CSS, rule files) and what areas they involve
+1. **GitHub context**: Is a PR diff already present in the current conversation or environment (e.g., invoked as a GitHub PR review bot, or the user pasted/attached a diff)? → set mode to `github-pr`, proceed directly to Step 2 (skip Step 1 entirely)
+2. **Explicit args**: Classify the argument:
+   - `--pr` alone → `pr` mode (auto-detect current branch PR)
+   - `--pr 123` or bare integer `123` → `pr` mode for PR #123
+   - Any path (contains `/` or is a recognizable filesystem path) → `path` mode
+   - `--all` → `path` mode for the entire codebase
+3. **Default**: No args and no ambient context → `changes` mode
+
+> **Note:** Always use `gh pr diff` for PR mode — never `git diff main...HEAD`, which incorrectly assumes the base branch.
+
+## Step 1: Gather Review Scope
+
+**Skip this step entirely in `github-pr` mode** — the diff is already in context.
+
+Use a Haiku agent to gather scope based on mode:
+
+- **changes mode**: Run `git status`, `git diff`, and `git log --oneline -5`; return a summary of changed files (components, brand CSS, token CSS, rule files) and what areas they involve
+- **pr mode**: Run `gh pr diff [number]` and `gh pr view [number] --json title,body,baseRefName,headRefName`; return a summary of the PR diff and metadata
+- **path mode**: Run `find [path] -type f` filtered to relevant extensions (`.ts`, `.tsx`, `.css`, `.json`) — or `git ls-files` for `--all`; return a list of files to review (agents will read them directly in Step 2)
 
 ## Step 2: Independent Code Review by Multiple Agents
 
-Launch **3 parallel agents** to independently review the changes:
+Launch parallel agents based on mode:
 
+**`github-pr` mode, `changes` mode, or `pr` mode** (diff available):
+
+Launch **3 parallel agents**:
 - Use the `component-architect` agent to audit for architecture violations (component structure, CVA patterns, styling rules) and token violations (three-tier system, naming conventions, pragmatic creation, synthetic tokens)
 - Use the `brand-reviewer` agent to audit the brand system (CSS architecture, variant composition, new brand checklists)
 - Use the `accessibility-reviewer` agent to audit for accessibility violations (ARIA, keyboard navigation, focus management, form fields, contrast, touch targets, reduced motion)
+
+**`path` mode** (no diff — agents read files directly):
+
+Launch **3 parallel agents** (all agents apply — no history agent to skip):
+- Use the `component-architect` agent to audit the code at the given path for architecture and token violations; instruct it to read files directly and **cap findings at 5 most critical issues**
+- Use the `brand-reviewer` agent to audit the code at the given path for brand system issues; instruct it to read files directly and **cap findings at 5 most critical issues**
+- Use the `accessibility-reviewer` agent to audit the code at the given path for accessibility violations; instruct it to read files directly and **cap findings at 5 most critical issues**
 
 Each agent returns a list of issues with the reason each was flagged.
 
@@ -43,6 +80,8 @@ If no issues remain after filtering, provide brief positive feedback and stop.
 
 ````markdown
 ### Design System Review
+
+**Mode:** [Changes | PR #123 | Path: src/components/ | All code]
 
 Found [N] issues:
 
@@ -95,6 +134,8 @@ Found [N] issues:
 
 ## Examples of False Positives (DO NOT FLAG)
 
+**For `changes` and `pr` mode:**
+
 - Pre-existing issues not introduced in this diff
 - One-off hardcoded values in consumer app code (not inside `packages/ui`)
 - External consumer code that uses the library but doesn't follow internal authoring patterns
@@ -102,6 +143,14 @@ Found [N] issues:
 - `outline-none` when a custom `focus-visible` ring is present on the same element
 - Brand variant files that intentionally duplicate Acorn styles during a migration in progress (check git log for intent)
 - Token names that differ from convention due to a pending rename tracked in a separate issue
+
+**For `path` mode:**
+
+- Pre-existing issues are fair game — reviewing existing code at a path is the point
+- Still exclude: one-off hardcoded values in consumer app code (not inside `packages/ui`)
+- Still exclude: issues linters/typecheckers would catch automatically
+- Still exclude: issues explicitly silenced in code (lint ignore comments)
+- Still exclude: pedantic nitpicks a senior engineer wouldn't call out
 
 ---
 

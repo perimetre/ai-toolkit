@@ -36,13 +36,23 @@ plugins/[plugin-name]/
 
 ## Multi-Agent Code Review Pattern
 
-The code review commands (`/perimetre-apps:code-review`, `/perimetre-design-system:review`, `/perimetre-wordpress:code-review`) follow this architecture:
+The code review commands (`/perimetre-apps:code-review`, `/perimetre-design-system:review`, `/perimetre-wordpress:code-review`) support four modes:
 
-1. An orchestrator examines the git diff
-2. 2–5 specialized agents run **in parallel** (pattern-reviewer, bug-scanner, security-reviewer, etc.)
-3. Each finding gets a confidence score (0–100)
-4. Issues below 80 confidence are filtered out
-5. Output is formatted with evidence and doc citations
+| Invocation | Mode | Behavior |
+|---|---|---|
+| _(no args)_ | **changes** | Reviews current uncommitted changes via `git diff` |
+| `--pr` / `--pr 123` / bare integer | **pr** | Reviews a PR diff via `gh pr diff` (never `git diff main...HEAD`) |
+| `src/` _(any path)_ or `--all` | **path** | Agents read files directly; history agents skipped |
+| _(GitHub PR context auto-detected)_ | **github-pr** | Uses diff already in context; skips Step 1 and history agents |
+
+**Architecture:**
+
+1. **Step 0** — Detects mode (GitHub context → explicit args → default `changes`)
+2. **Step 1** — A Haiku agent gathers scope (skipped in `github-pr` mode)
+3. **Step 2** — 2–5 specialized agents run **in parallel**; history agents are skipped in `github-pr` and `path` modes
+4. **Step 3** — Each finding gets a confidence score (0–100)
+5. **Step 4** — Issues below 80 confidence are filtered out
+6. **Step 5** — Output is formatted with evidence, doc citations, and a **Mode** line
 
 Agent definitions live in `plugins/[plugin]/agents/[agent].md`. They use constrained tools (Read, Grep, Glob, Bash) and inject skill documentation as context.
 
