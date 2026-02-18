@@ -32,14 +32,14 @@ Migrated from `framework/LLMs/` — each skill covers one technology area in det
 |-------|-------------|
 | `code-review` | Multi-agent PR review with confidence scoring and local pattern references |
 
-### React & Performance (third-party, migrated as-is)
+### React & Performance (third-party)
 
 | Skill | Description |
 |-------|-------------|
 | `vercel-react-best-practices` | 57 Vercel-authored performance rules across 8 categories |
 | `vercel-composition-patterns` | Compound components, boolean prop avoidance, React 19 patterns |
 
-### Design & UX (third-party, migrated as-is)
+### Design & UX (third-party)
 
 | Skill | Description |
 |-------|-------------|

@@ -1,9 +1,10 @@
 ---
 name: code-review
 description: >
-  Performs pragmatic code reviews for Next.js/React projects using Perimetre framework patterns.
-  Use when: doing code review, reviewing pull requests, checking code quality, reviewing changed files,
-  analyzing git diffs, or when user requests code review of recent changes.
+  Injected context for the code-review command and agents. Contains the full multi-agent review
+  methodology for Next.js/React projects using Périmètre framework patterns: 5-step pipeline
+  (examine changes → 3 parallel agents → confidence scoring → filter → format output).
+  The user-facing entrypoint is commands/code-review.md — invoke via /perimetre-app:code-review.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
@@ -173,7 +174,7 @@ Give this rubric **verbatim** to scoring agents:
 This is the **source of truth** for code reviews. When in doubt:
 
 1. Consult local pattern skills in `skills/` directory
-2. Check `skills/code-review/PATTERNS.md` for detailed examples
+2. Check `skills/code-review/rules/PATTERNS.md` for detailed examples
 3. Use confidence scoring to filter false positives
 4. Err on side of pragmatism
 

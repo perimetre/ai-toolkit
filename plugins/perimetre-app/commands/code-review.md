@@ -172,4 +172,4 @@ Local skill files (for deep-dive on specific patterns):
 - `skills/seo/SKILL.md`
 - `skills/caching/SKILL.md`
 - `skills/payload-drizzle/SKILL.md`
-- `skills/code-review/PATTERNS.md` (detailed examples)
+- `skills/code-review/rules/PATTERNS.md` (detailed examples)

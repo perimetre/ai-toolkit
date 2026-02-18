@@ -1,10 +1,11 @@
 ---
 name: code-review
 description: >
-  WordPress-specific code review for Périmètre projects. Use when reviewing PHP themes,
-  Gutenberg blocks, custom plugins, or REST API extensions. Checks PHP coding standards,
-  security (nonces, sanitization, escaping, capability checks), hook/filter patterns,
-  i18n, and query performance.
+  Injected context for the WordPress code-review command and agents. Contains the full
+  multi-agent review methodology for PHP themes, Gutenberg blocks, custom plugins, and
+  REST API extensions: security (nonces, sanitization, escaping, capabilities), WPCS,
+  i18n, query performance, and hook patterns. The user-facing entrypoint is
+  commands/code-review.md — invoke via /perimetre-wordpress:code-review.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
