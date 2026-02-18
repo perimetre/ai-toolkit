@@ -11,42 +11,42 @@
   "plugins": [
     {
       "name": "perimetre-brand-guidelines",
-      "path": "./plugins/perimetre-brand-guidelines",
+      "source": "./plugins/perimetre-brand-guidelines",
       "version": "1.0.0",
       "description": "Keep Claude aligned with Périmètre's visual identity — colours, typography, and logo usage.",
-      "author": "Périmètre",
+      "author": { "name": "Périmètre" },
       "tags": ["brand", "design", "perimetre"]
     },
     {
       "name": "perimetre-apps",
-      "path": "./plugins/perimetre-apps",
+      "source": "./plugins/perimetre-apps",
       "version": "1.0.0",
       "description": "Périmètre patterns and best practices for JS/TS/React/Next.js apps. Includes framework patterns (error handling, services, tRPC, forms, GraphQL, caching, SEO), code review, React performance rules, composition patterns, and design engineering guidance.",
-      "author": "Périmètre",
+      "author": { "name": "Périmètre" },
       "tags": ["app", "react", "nextjs", "typescript", "code-review", "perimetre"]
     },
     {
       "name": "perimetre-design-system",
-      "path": "./plugins/perimetre-design-system",
+      "source": "./plugins/perimetre-design-system",
       "version": "1.0.0",
       "description": "Expert guidance for implementing and extending @perimetre/ui — a brand-aware React component library built on Tailwind CSS v4, CVA, and Radix UI.",
-      "author": "Périmètre",
+      "author": { "name": "Périmètre" },
       "tags": ["design-system", "ui", "components", "tokens", "perimetre"]
     },
     {
       "name": "perimetre-wordpress",
-      "path": "./plugins/perimetre-wordpress",
+      "source": "./plugins/perimetre-wordpress",
       "version": "1.0.0",
       "description": "WordPress development patterns and code review for Périmètre projects. Covers PHP standards, security, Gutenberg blocks, REST API, headless WP, and i18n.",
-      "author": "Périmètre",
+      "author": { "name": "Périmètre" },
       "tags": ["wordpress", "php", "gutenberg", "code-review", "perimetre"]
     },
     {
       "name": "perimetre-documents",
-      "path": "./plugins/perimetre-documents",
+      "source": "./plugins/perimetre-documents",
       "version": "1.0.0",
       "description": "Professional document writing guidance for the Périmètre team — structure, clarity, tone, and formatting for reports, proposals, and presentations.",
-      "author": "Périmètre",
+      "author": { "name": "Périmètre" },
       "tags": ["document", "writing", "reports", "perimetre"]
     }
   ]
