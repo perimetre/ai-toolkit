@@ -4,7 +4,7 @@ description: >
   Professional document writing principles for Périmètre team members. Use when writing
   reports, proposals, project briefs, presentations, or any structured document for
   clients or internal use. Covers structure, tone, headings, tables, and formatting.
-  Brand-agnostic — install perimetre-brand alongside for visual identity guidance.
+  Brand-agnostic — install perimetre-brand-guidelines alongside for visual identity guidance.
 ---
 
 # Professional Document Writing

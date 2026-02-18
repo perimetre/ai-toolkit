@@ -12,15 +12,15 @@ Add this marketplace to Claude:
 
 ## Plugins
 
-### `perimetre-app`
+### `perimetre-apps`
 
 For the dev team building apps and prototypes with the Périmètre JS/TS/React/Next.js stack.
 
 **Skills:** `error-handling`, `services`, `trpc`, `forms`, `graphql`, `tanstack-query`, `icons`, `images`, `seo`, `caching`, `payload-drizzle`, `code-review`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `web-animation-design`, `emil-design-engineering`
 
-**Commands:** `/perimetre-app:code-review`
+**Commands:** `/perimetre-apps:code-review`
 
-### `perimetre-brand`
+### `perimetre-brand-guidelines`
 
 Loads Périmètre's visual identity guidelines into context — colours, typography, and logo usage — so every deliverable is on-brand.
 
@@ -28,15 +28,15 @@ Loads Périmètre's visual identity guidelines into context — colours, typogra
 
 ### `perimetre-design-system`
 
-For the dev team working on `@perimetre/ui` — Périmètre's brand-aware React component library. Not for consumers; use `perimetre-app` if you're building apps that use the design system.
+For the dev team working on `@perimetre/ui` — Périmètre's brand-aware React component library. Not for consumers; use `perimetre-apps` if you're building apps that use the design system.
 
 **Skills:** `design-system`
 
 **Commands:** `/perimetre-design-system:review`
 
-### `perimetre-document`
+### `perimetre-documents`
 
-For anyone writing professional documents — reports, proposals, and presentations. Brand-agnostic by design; pair with `perimetre-brand` for on-brand output.
+For anyone writing professional documents — reports, proposals, and presentations. Brand-agnostic by design; pair with `perimetre-brand-guidelines` for on-brand output.
 
 **Skills:** `document`
 

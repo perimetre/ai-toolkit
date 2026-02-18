@@ -1,4 +1,4 @@
-# perimetre-brand
+# perimetre-brand-guidelines
 
 A plugin for keeping Claude aligned with Périmètre's visual identity. It loads the brand guidelines — colours, typography, and logo usage — directly into context so that any deliverable Claude produces is consistent and on-brand.
 

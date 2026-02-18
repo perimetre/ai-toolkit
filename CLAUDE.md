@@ -28,15 +28,15 @@ plugins/[plugin-name]/
 
 | Plugin | Purpose | Key Skills |
 |--------|---------|------------|
-| `perimetre-app` | Full-stack JS/TS/React/Next.js | error-handling (discriminated unions), services, tRPC, forms, TanStack Query, Vercel rules |
-| `perimetre-brand` | Visual identity guidelines | brand-guidelines (colours: Carbon #111111, Aqua #13FADC; Satoshi typeface) |
+| `perimetre-apps` | Full-stack JS/TS/React/Next.js | error-handling (discriminated unions), services, tRPC, forms, TanStack Query, Vercel rules |
+| `perimetre-brand-guidelines` | Visual identity guidelines | brand-guidelines (colours: Carbon #111111, Aqua #13FADC; Satoshi typeface) |
 | `perimetre-design-system` | `@perimetre/ui` component library development | CVA patterns, three-tier token system, multi-brand CSS with `data-pui-brand` |
 | `perimetre-wordpress` | WordPress/PHP development | code-review, wordpress-patterns |
-| `perimetre-document` | Professional document writing | document (pairs with perimetre-brand) |
+| `perimetre-documents` | Professional document writing | document (pairs with perimetre-brand-guidelines) |
 
 ## Multi-Agent Code Review Pattern
 
-The code review commands (`/perimetre-app:code-review`, `/perimetre-design-system:review`, `/perimetre-wordpress:code-review`) follow this architecture:
+The code review commands (`/perimetre-apps:code-review`, `/perimetre-design-system:review`, `/perimetre-wordpress:code-review`) follow this architecture:
 
 1. An orchestrator examines the git diff
 2. 2–5 specialized agents run **in parallel** (pattern-reviewer, bug-scanner, security-reviewer, etc.)
@@ -48,7 +48,7 @@ Agent definitions live in `plugins/[plugin]/agents/[agent].md`. They use constra
 
 ## Working with Plugins
 
-When creating, reviewing, or refactoring any plugin component (plugin.json, SKILL.md, commands, agents, rules), always consult the official Claude Plugin documentation first: https://claude.ai/plugins/docs
+When creating, reviewing, or refactoring any plugin component (plugin.json, SKILL.md, commands, agents, rules), always consult the official Claude Plugin documentation first: https://code.claude.com/docs/en/plugins-reference
 
 ## Adding a New Plugin
 
@@ -59,5 +59,5 @@ When creating, reviewing, or refactoring any plugin component (plugin.json, SKIL
 ## Key Files
 
 - `.claude-plugin/marketplace.json` — Central plugin registry
-- `plugins/perimetre-app/skills/error-handling/SKILL.md` — 950+ line error-handling reference (Go/Rust-style discriminated unions)
+- `plugins/perimetre-apps/skills/error-handling/SKILL.md` — 950+ line error-handling reference (Go/Rust-style discriminated unions)
 - `plugins/perimetre-design-system/skills/design-system/rules/` — 11 rule files for the token architecture and brand system
