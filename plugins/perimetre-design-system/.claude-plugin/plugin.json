@@ -1,0 +1,8 @@
+{
+  "name": "perimetre-design-system",
+  "version": "1.0.0",
+  "description": "Expert guidance for implementing and extending @perimetre/ui — a brand-aware React component library built on Tailwind CSS v4, CVA, and Radix UI. Covers design tokens, brand variants, component architecture, accessibility, and CVA patterns.",
+  "author": {
+    "name": "Périmètre"
+  }
+}

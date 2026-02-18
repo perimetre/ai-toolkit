@@ -1,0 +1,8 @@
+{
+  "name": "perimetre-app",
+  "version": "1.0.0",
+  "description": "Périmètre patterns and best practices for JS/TS/React/Next.js apps. Includes framework patterns (error handling, services, tRPC, forms, GraphQL, caching, SEO), code review, React performance rules, composition patterns, and design engineering guidance.",
+  "author": {
+    "name": "Périmètre"
+  }
+}

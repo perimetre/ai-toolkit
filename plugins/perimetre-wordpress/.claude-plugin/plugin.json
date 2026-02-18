@@ -1,0 +1,8 @@
+{
+  "name": "perimetre-wordpress",
+  "version": "1.0.0",
+  "description": "WordPress development patterns and code review for Périmètre projects. Covers PHP coding standards, security (nonces, sanitization, escaping), Gutenberg block development, REST API extensions, headless WP with Next.js, and i18n.",
+  "author": {
+    "name": "Périmètre"
+  }
+}

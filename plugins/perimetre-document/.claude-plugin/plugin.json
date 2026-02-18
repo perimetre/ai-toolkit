@@ -1,0 +1,8 @@
+{
+  "name": "perimetre-document",
+  "version": "1.0.0",
+  "description": "Professional document writing guidance for the Périmètre team. Covers structure, clarity, tone, and formatting principles for reports, proposals, and presentations. Brand-agnostic — pairs with perimetre-brand for visual identity.",
+  "author": {
+    "name": "Périmètre"
+  }
+}
