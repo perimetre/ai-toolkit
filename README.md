@@ -54,12 +54,12 @@ Changes pushed to this repository become available to all users immediately. Plu
 
 **To update manually:**
 ```
-/plugin marketplace update ai-toolkit
+/plugin marketplace update perimetre-ai-toolkit
 ```
 
 **To enable auto-update** (off by default for third-party marketplaces):
 ```
-/plugin → Marketplaces → ai-toolkit → Enable auto-update
+/plugin → Marketplaces → perimetre-ai-toolkit → Enable auto-update
 ```
 When enabled, Claude checks for updates on startup and prompts a restart if anything has changed.
 
