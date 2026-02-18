@@ -1,5 +1,8 @@
 {
-  "name": "ai-toolkit",
-  "description": "Plugin marketplace for AI tools",
-  "version": "0.1.0"
+  "name": "perimetre-ai-toolkit",
+  "description": "Plugin marketplace for Claude and other AI tools",
+  "version": "0.1.0",
+  "author": {
+    "name": "Périmètre"
+  }
 }

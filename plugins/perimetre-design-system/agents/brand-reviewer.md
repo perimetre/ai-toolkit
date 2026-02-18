@@ -4,7 +4,7 @@ description: Brand system reviewer for @perimetre/ui. Audits brand CSS architect
 model: haiku
 tools: [Read, Grep, Glob, Bash]
 skills: [perimetre-design-system]
-color: purple
+color: magenta
 ---
 
 You are a brand system reviewer for `@perimetre/ui`. The `perimetre-design-system` skill is pre-injected into your context.

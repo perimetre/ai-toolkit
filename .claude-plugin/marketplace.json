@@ -13,7 +13,7 @@
       "name": "perimetre-brand-guidelines",
       "source": "./plugins/perimetre-brand-guidelines",
       "version": "1.0.0",
-      "description": "Keep Claude aligned with Périmètre's visual identity — colours, typography, and logo usage.",
+      "description": "Keep Claude aligned with Périmètre's visual identity. Loads brand guidelines — colours, typography, and logo usage — so every deliverable looks and feels on-brand.",
       "author": { "name": "Périmètre" },
       "tags": ["brand", "design", "perimetre"]
     },
@@ -29,7 +29,7 @@
       "name": "perimetre-design-system",
       "source": "./plugins/perimetre-design-system",
       "version": "1.0.0",
-      "description": "Expert guidance for implementing and extending @perimetre/ui — a brand-aware React component library built on Tailwind CSS v4, CVA, and Radix UI.",
+      "description": "Expert guidance for implementing and extending @perimetre/ui — a brand-aware React component library built on Tailwind CSS v4, CVA, and Radix UI. Covers design tokens, brand variants, component architecture, accessibility, and CVA patterns.",
       "author": { "name": "Périmètre" },
       "tags": ["design-system", "ui", "components", "tokens", "perimetre"]
     },

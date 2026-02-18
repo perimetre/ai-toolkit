@@ -1,4 +1,6 @@
-# perimetre-app
+# perimetre-apps
+
+**Version:** 1.0.0 — Last updated: 2026-02-18
 
 Claude plugin for Périmètre app development. Covers the full stack of patterns used in JS/TS/React/Next.js projects.
 

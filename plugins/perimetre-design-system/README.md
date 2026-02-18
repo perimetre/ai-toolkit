@@ -1,12 +1,14 @@
 # perimetre-design-system
 
+**Version:** 1.0.0 — Last updated: 2026-02-18
+
 Claude plugin for developers working ON `@perimetre/ui` — Périmètre's brand-aware React component library.
 
 ## Audience
 
 Dev team creating or extending components, brand variants, and design tokens in the `@perimetre/ui` package.
 
-> **Not for consumers.** If you're using `@perimetre/ui` in an app, install `perimetre-app` instead.
+> **Not for consumers.** If you're using `@perimetre/ui` in an app, install `perimetre-apps` instead.
 
 ## Skills
 
@@ -16,7 +18,7 @@ Dev team creating or extending components, brand variants, and design tokens in 
 
 ## Code Review
 
-Invoke `/perimetre-design-system:review` to run a multi-agent design system review with confidence scoring. Supported modes:
+Invoke `/perimetre-design-system:code-review` to run a multi-agent design system review with confidence scoring. Supported modes:
 
 | Invocation | Mode |
 |---|---|

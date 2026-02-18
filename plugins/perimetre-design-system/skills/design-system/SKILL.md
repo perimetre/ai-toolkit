@@ -1,10 +1,8 @@
 ---
 name: perimetre-design-system
 description: Expert guidance for implementing and extending the @perimetre/ui design system - a brand-aware, visually polymorphic React component library built on Tailwind CSS v4, CVA, and Radix UI primitives. Use when creating new components, adding brand variants, defining design tokens, reviewing UI component code, implementing accessible form fields, extending the token system, or working with the brand registry. Triggers on tasks involving design tokens, brand variants, CVA patterns, component theming, visual polymorphism, Tailwind v4 @theme, semantic tokens, pui prefix, data-pui-brand, component library architecture, accessible components, or form field components.
-license: MIT
-metadata:
-  author: perimetre
-  version: '1.0.0'
+tools: [Read, Grep, Glob, Bash]
+skills: []
 ---
 
 # Perimetre Design System Expert

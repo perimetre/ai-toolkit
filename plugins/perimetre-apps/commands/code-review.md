@@ -1,3 +1,9 @@
+---
+description: "Multi-agent code review for Périmètre React/Next.js projects. Supports changes, PR, path, and GitHub PR modes."
+argument-hint: "[--pr [number] | <path> | --all]"
+allowed-tools: [Read, Grep, Glob, Bash, Task]
+---
+
 # Périmètre Code Review
 
 Provide a comprehensive code review for the recent changes using Périmètre framework patterns.

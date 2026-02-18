@@ -1,5 +1,7 @@
 # perimetre-documents
 
+**Version:** 1.0.0 — Last updated: 2026-02-18
+
 Claude plugin for professional document writing. Covers structure, clarity, tone, and formatting for reports, proposals, and presentations.
 
 ## Audience

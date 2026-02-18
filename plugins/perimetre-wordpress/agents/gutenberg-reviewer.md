@@ -4,7 +4,7 @@ description: Gutenberg and block patterns reviewer. Checks block.json, dynamic b
 model: haiku
 tools: [Bash, Read, Glob]
 skills: [wordpress-patterns]
-color: purple
+color: magenta
 ---
 
 You are a Gutenberg and block patterns reviewer. The `wordpress-patterns` skill is pre-injected into your context.

@@ -36,7 +36,7 @@ plugins/[plugin-name]/
 
 ## Multi-Agent Code Review Pattern
 
-The code review commands (`/perimetre-apps:code-review`, `/perimetre-design-system:review`, `/perimetre-wordpress:code-review`) support four modes:
+The code review commands (`/perimetre-apps:code-review`, `/perimetre-design-system:code-review`, `/perimetre-wordpress:code-review`) support four modes:
 
 | Invocation | Mode | Behavior |
 |---|---|---|
@@ -59,6 +59,17 @@ Agent definitions live in `plugins/[plugin]/agents/[agent].md`. They use constra
 ## Working with Plugins
 
 When creating, reviewing, or refactoring any plugin component (plugin.json, SKILL.md, commands, agents, rules), always consult the official Claude Plugin documentation first: https://code.claude.com/docs/en/plugins-reference
+
+## CRITICAL: After Every Plugin Change
+
+**NEVER forget these steps when modifying any plugin:**
+
+1. **Bump the version number** in `plugins/[plugin-name]/.claude-plugin/plugin.json`
+2. **Update the plugin's README.md** to reflect changes
+3. **Update the root marketplace README.md** if the change is significant
+4. **READMEs must always show the current version number and last update date**
+
+These steps are mandatory — skipping them leaves the marketplace in an inconsistent state.
 
 ## Adding a New Plugin
 

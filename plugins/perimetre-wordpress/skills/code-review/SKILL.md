@@ -6,7 +6,8 @@ description: >
   REST API extensions: security (nonces, sanitization, escaping, capabilities), WPCS,
   i18n, query performance, and hook patterns. The user-facing entrypoint is
   commands/code-review.md — invoke via /perimetre-wordpress:code-review.
-allowed-tools: Read, Grep, Glob, Bash, Task
+tools: [Read, Grep, Glob, Bash, Task]
+skills: [wordpress-patterns]
 ---
 
 # WordPress Code Review

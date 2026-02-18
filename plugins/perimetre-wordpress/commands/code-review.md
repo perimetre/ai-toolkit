@@ -1,3 +1,9 @@
+---
+description: "WordPress code review: security, WPCS, Gutenberg, i18n, and query performance. Supports changes, PR, path, and GitHub PR modes."
+argument-hint: "[--pr [number] | <path> | --all]"
+allowed-tools: [Read, Grep, Glob, Bash, Task]
+---
+
 # Périmètre WordPress Code Review
 
 Provide a comprehensive WordPress code review for the recent changes.

@@ -1,5 +1,7 @@
 # perimetre-wordpress
 
+**Version:** 1.0.0 — Last updated: 2026-02-18
+
 Claude plugin for Périmètre WordPress development. Covers PHP coding standards, security, Gutenberg blocks, REST API, and headless WordPress patterns.
 
 ## Audience
@@ -11,6 +13,7 @@ Dev team building WordPress sites — PHP themes, Gutenberg blocks, custom plugi
 | Skill | Description |
 |-------|-------------|
 | `code-review` | WordPress-specific code review: PHP standards, security, hooks, Gutenberg, i18n, query performance |
+| `wordpress-patterns` | Development best practices: theme structure, CPTs, block development, REST API, headless WP, security checklist |
 
 Invoke `/perimetre-wordpress:code-review` in multiple modes:
 
@@ -20,4 +23,3 @@ Invoke `/perimetre-wordpress:code-review` in multiple modes:
 | `--pr` / `--pr 123` / bare integer | PR diff via `gh pr diff` |
 | `src/` _(any path)_ or `--all` | Review files at a path directly |
 | _(GitHub PR context)_ | Auto-detected — uses diff already in context |
-| `wordpress-patterns` | Development best practices: theme structure, CPTs, block development, REST API, headless WP, security checklist |

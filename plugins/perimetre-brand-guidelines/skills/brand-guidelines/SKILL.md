@@ -1,6 +1,8 @@
 ---
 name: brand-guidelines
 description: Load Périmètre's visual identity guidelines into context. Use this skill whenever producing any branded deliverable — documents, presentations, emails, social content, or any other output that represents Périmètre externally or internally. This skill ensures consistent use of colours, typography, and logo across all work.
+tools: []
+skills: []
 ---
 
 # Périmètre Brand Guidelines
@@ -29,7 +31,7 @@ Périmètre uses a restrained, professional palette built around two neutral pri
 
 ### Accent Colour
 
-*(Name TBC)* — The brand accent. A vivid cyan used for highlights, underlines, active states, decorative borders, and calls to action.
+**Aqua** — The brand accent. A vivid cyan used for highlights, underlines, active states, decorative borders, and calls to action.
 - HEX: `#13FADC`
 - RGB: 19, 250, 220
 - Usage: Highlights, underlines, accent borders, tags, badges, key data callouts. Never use as a large background fill — it should draw the eye. Overuse will dilute its impact.
@@ -174,7 +176,7 @@ Périmètre's written voice reflects its visual identity — precise, confident,
 |---|---|
 | Primary text colour | `#111111` (Carbon) |
 | Secondary / muted text | `#737678` (Steel) |
-| Accent / highlight | `#13FADC` *(name TBC)* |
+| Accent / highlight | `#13FADC` (Aqua) |
 | Background (default) | `#FFFFFF` (White) |
 | Background (dark) | `#111111` (Carbon) |
 | Primary font | Satoshi |

@@ -1,3 +1,9 @@
+---
+description: "Multi-agent design system review for @perimetre/ui. Supports changes, PR, path, and GitHub PR modes."
+argument-hint: "[--pr [number] | <path> | --all]"
+allowed-tools: [Read, Grep, Glob, Bash, Task]
+---
+
 # Périmètre Design System Review
 
 Provide a comprehensive design system review for recent changes to `@perimetre/ui`.

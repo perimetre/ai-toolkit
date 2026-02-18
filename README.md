@@ -1,5 +1,7 @@
 # AI Toolkit
 
+**Version:** 0.1.0 — Last updated: 2026-02-18
+
 Périmètre's internal plugin marketplace for Claude.
 
 ## Installation
@@ -32,7 +34,7 @@ For the dev team working on `@perimetre/ui` — Périmètre's brand-aware React 
 
 **Skills:** `design-system`
 
-**Commands:** `/perimetre-design-system:review`
+**Commands:** `/perimetre-design-system:code-review`
 
 ### `perimetre-documents`
 
