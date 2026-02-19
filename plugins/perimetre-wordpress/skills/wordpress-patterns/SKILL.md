@@ -2,14 +2,32 @@
 name: wordpress-patterns
 description: >
   WordPress development best practices for Périmètre projects. Use when building themes,
-  custom post types, Gutenberg blocks, REST API extensions, or integrating headless
-  WordPress with Next.js. Covers PHP patterns, security checklist, block development
-  with @wordpress/scripts, and WP + Next.js integration.
+  custom post types, Gutenberg blocks (native and ACF Pro), REST API extensions, or
+  integrating headless WordPress with Next.js via WPGraphQL. Covers PHP patterns,
+  security checklist, block development with @wordpress/scripts and ACF, WPGraphQL
+  editorBlocks querying, WPML translation, and WP + Next.js integration.
 ---
 
 # WordPress Development Patterns
 
 Best practices for building WordPress sites the Périmètre way — secure, maintainable, and standards-compliant.
+
+## Plugin Stack
+
+### Traditional Sites
+- **ACF Pro** — custom fields, repeaters, ACF block registration
+- **WPML + ACF Multilingual** — translation management
+
+### Headless Sites (WPGraphQL)
+- **WPGraphQL** — core GraphQL API
+- **WPGraphQL Content Blocks** (WP Engine) — adds typed `editorBlocks` to posts/pages
+- **WPGraphQL for ACF** (v2.0+) — exposes ACF field groups as typed GraphQL types inside `editorBlocks`
+- **WPML GraphQL** — adds `language`, `translations`, and language filtering at the post level
+
+> Note: WPML operates at the post level, not the block level. Each translated post has its own
+> translated block content — you don't filter blocks by language, you query a different post.
+
+---
 
 ## Theme Structure
 
@@ -186,11 +204,256 @@ function peri_render_project_card( array $attributes, string $content ): string 
 }
 ```
 
+### ACF Blocks vs Native Blocks
+
+Périmètre projects use **both** ACF blocks and native Gutenberg blocks. Choose the right type per block — never mix both approaches in a single block.
+
+| | **ACF Block** | **Native Block** |
+|---|---|---|
+| Best for | Field-heavy blocks (repeaters, image fields, selects) | Content-oriented blocks with live inline editing |
+| Editor UI | Sidebar-based (InspectorControls via ACF) | React `edit()` component with inline editing |
+| Requires React | No | Yes |
+| Build speed | Faster | Slower (requires JS build step) |
+| GraphQL output | `editorBlocks` → ACF field group (e.g. `heroFields`) | `editorBlocks` → `attributes` object |
+
+**Never mix ACF and native block patterns in the same block.**
+
+Both produce clean, typed `editorBlocks` output in WPGraphQL — the frontend query pattern is identical.
+
+### ACF Block Registration
+
+```php
+<?php
+// inc/blocks/hero.php — register on acf/init, not init
+add_action( 'acf/init', 'peri_register_acf_blocks' );
+
+function peri_register_acf_blocks(): void {
+    acf_register_block_type( [
+        'name'            => 'hero',             // Prefixed automatically: acf/hero
+        'title'           => __( 'Hero', 'peri-theme' ),
+        'description'     => __( 'Full-width hero section.', 'peri-theme' ),
+        'render_template' => get_template_directory() . '/blocks/hero/render.php',
+        'category'        => 'theme',
+        'icon'            => 'cover-image',
+        'keywords'        => [ 'hero', 'banner' ],
+        'supports'        => [ 'align' => false ],
+    ] );
+}
+```
+
+### ACF Block Render Template
+
+```php
+<?php
+// blocks/hero/render.php
+// Always use get_field(), never the_field() — the_field() outputs unescaped HTML
+$title    = get_field( 'title' );
+$subtitle = get_field( 'subtitle' );
+$image    = get_field( 'image' );  // Returns array with 'url', 'alt', etc.
+$cta_url  = get_field( 'cta_url' );
+?>
+<section class="wp-block-acf-hero">
+    <?php if ( $title ) : ?>
+        <h1><?php echo esc_html( $title ); ?></h1>
+    <?php endif; ?>
+
+    <?php if ( $subtitle ) : ?>
+        <p><?php echo esc_html( $subtitle ); ?></p>
+    <?php endif; ?>
+
+    <?php if ( $image ) : ?>
+        <img
+            src="<?php echo esc_url( $image['url'] ); ?>"
+            alt="<?php echo esc_attr( $image['alt'] ); ?>"
+        />
+    <?php endif; ?>
+
+    <?php if ( $cta_url ) : ?>
+        <a href="<?php echo esc_url( $cta_url ); ?>">
+            <?php esc_html_e( 'Learn more', 'peri-theme' ); ?>
+        </a>
+    <?php endif; ?>
+</section>
+```
+
+**ACF escaping rules:**
+- Always `esc_html( get_field() )` for text output
+- Always `esc_url( get_field() )` for URLs
+- Always `esc_attr( get_field() )` for HTML attributes
+- Never use `the_field()` — it echoes unescaped content
+
 ---
 
-## REST API Extensions
+## WPGraphQL & Headless Architecture
 
-Use `register_rest_route()` inside the `rest_api_init` hook.
+Périmètre headless builds use WPGraphQL (+ companion plugins) as the primary API layer.
+
+### Setup
+
+Install and activate the full plugin stack (see Plugin Stack section above). In **WPGraphQL → Settings**, enable **Public Introspection** so `@graphql-codegen/cli` can read the schema. Disable Public Introspection in production — always run codegen against a staging environment.
+
+### WordPress side — CORS
+
+```php
+<?php
+// Allow cross-origin requests from Next.js dev + prod domains
+add_filter( 'allowed_http_origins', 'peri_allowed_origins' );
+
+function peri_allowed_origins( array $origins ): array {
+    $origins[] = 'https://yoursite.com';
+    $origins[] = 'http://localhost:3000';
+    return $origins;
+}
+```
+
+### `editorBlocks` Query Pattern
+
+All blocks (both native and ACF) appear in `editorBlocks`. Use `__typename` to branch on block type.
+
+```graphql
+query GetPage($id: ID!) {
+  page(id: $id, idType: URI) {
+    title
+    editorBlocks(flat: false) {
+      __typename
+      name
+      renderedHtml
+      innerBlocks {
+        __typename
+        name
+        renderedHtml
+      }
+
+      # Native block — attributes object
+      ... on CoreHeading {
+        attributes {
+          level
+          content
+        }
+      }
+
+      # Native block — paragraph
+      ... on CoreParagraph {
+        attributes {
+          content
+          dropCap
+        }
+      }
+
+      # ACF block — field group exposed as typed object
+      ... on AcfHero {
+        heroFields {
+          title
+          subtitle
+          ctaUrl
+          image {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+        }
+      }
+
+      # ACF block with repeater
+      ... on AcfFeatureList {
+        featureListFields {
+          items {
+            label
+            description
+            icon {
+              node {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Key rules:**
+- Images resolve to `MediaItem` nodes (not raw IDs) — always access via `node { sourceUrl altText }`
+- ACF repeaters resolve as typed arrays — field names match the ACF field key (camelCased)
+- Use `flat: false` to preserve `innerBlocks` nesting; use `flat: true` for flat lists
+
+### WPML GraphQL
+
+WPML operates at the post level. Query a specific language by passing the `language` arg, and access `translations` to get sibling posts.
+
+```graphql
+query GetPageFR($id: ID!) {
+  page(id: $id, idType: URI, language: FR) {
+    title
+    language {
+      code
+      locale
+    }
+    translations {
+      language {
+        code
+      }
+      uri
+    }
+    editorBlocks(flat: false) {
+      __typename
+      name
+      renderedHtml
+    }
+  }
+}
+```
+
+### Next.js Fetch Pattern
+
+```typescript
+// lib/graphql.ts
+const WP_GRAPHQL = process.env.WORDPRESS_GRAPHQL_URL; // e.g. https://cms.yoursite.com/graphql
+
+export async function fetchGraphQL<T>(
+  query: string,
+  variables: Record<string, unknown> = {},
+  revalidate = 3600
+): Promise<T> {
+  const res = await fetch(WP_GRAPHQL!, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+    next: { revalidate }, // ISR: revalidate every hour by default
+  });
+
+  if (!res.ok) throw new Error(`GraphQL fetch failed: ${res.status}`);
+
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0].message);
+  return json.data as T;
+}
+```
+
+### Codegen Configuration
+
+```yaml
+# codegen.yml — points at staging schema
+schema:
+  - https://cms-staging.yoursite.com/graphql
+documents: 'src/**/*.graphql'
+generates:
+  src/lib/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+config:
+  avoidOptionals: true
+  nonOptionalTypename: true
+```
+
+Run `graphql-codegen` against staging — never production. Public Introspection must be enabled on the staging WP instance.
+
+### REST API (Traditional Builds)
+
+For non-headless builds, use `register_rest_route()` inside the `rest_api_init` hook:
 
 ```php
 <?php
@@ -210,99 +473,14 @@ function peri_register_rest_routes(): void {
             ],
         ],
     ] );
-
-    register_rest_route( 'peri/v1', '/projects/(?P<id>\d+)', [
-        'methods'             => WP_REST_Server::READABLE,
-        'callback'            => 'peri_get_project',
-        'permission_callback' => '__return_true',
-        'args'                => [
-            'id' => [
-                'validate_callback' => fn( $id ) => is_numeric( $id ),
-                'sanitize_callback' => 'absint',
-            ],
-        ],
-    ] );
-}
-
-function peri_get_projects( WP_REST_Request $request ): WP_REST_Response {
-    $per_page = $request->get_param( 'per_page' );
-
-    $query = new WP_Query( [
-        'post_type'      => 'peri_project',
-        'posts_per_page' => $per_page,
-        'post_status'    => 'publish',
-        'no_found_rows'  => false,
-    ] );
-
-    $projects = array_map( 'peri_format_project', $query->posts );
-
-    return rest_ensure_response( [
-        'data'  => $projects,
-        'total' => $query->found_posts,
-    ] );
 }
 ```
 
-**Rules:**
+**REST API rules:**
 - Always define `permission_callback` — never omit it
 - Always sanitize and validate query args
 - Return `WP_REST_Response` via `rest_ensure_response()`
 - Use `WP_REST_Server::READABLE` / `CREATABLE` / `EDITABLE` / `DELETABLE` constants
-
----
-
-## Headless WordPress + Next.js
-
-When using WordPress as a headless CMS with a Next.js frontend:
-
-### WordPress side
-
-```php
-<?php
-// Allow cross-origin requests from Next.js dev + prod domains
-add_filter( 'allowed_http_origins', 'peri_allowed_origins' );
-
-function peri_allowed_origins( array $origins ): array {
-    $origins[] = 'https://yoursite.com';
-    $origins[] = 'http://localhost:3000';
-    return $origins;
-}
-
-// Expose featured image URL in REST API
-add_filter( 'rest_prepare_peri_project', 'peri_add_featured_image_url', 10, 3 );
-
-function peri_add_featured_image_url(
-    WP_REST_Response $response,
-    WP_Post $post,
-    WP_REST_Request $request
-): WP_REST_Response {
-    $featured_id = get_post_thumbnail_id( $post->ID );
-    if ( $featured_id ) {
-        $response->data['featured_image_url'] = wp_get_attachment_image_url(
-            $featured_id,
-            'large'
-        );
-    }
-    return $response;
-}
-```
-
-### Next.js side
-
-```typescript
-// lib/wordpress.ts
-const WP_API = process.env.WORDPRESS_API_URL; // e.g. https://cms.yoursite.com/wp-json
-
-export async function getProjects(perPage = 10) {
-  const res = await fetch(
-    `${WP_API}/peri/v1/projects?per_page=${perPage}`,
-    { next: { revalidate: 3600 } } // ISR: revalidate every hour
-  );
-
-  if (!res.ok) throw new Error('Failed to fetch projects');
-  return res.json();
-}
-```
 
 ---
 

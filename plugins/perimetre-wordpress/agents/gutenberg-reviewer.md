@@ -21,6 +21,9 @@ Your job is to audit the git diff for Gutenberg and block development pattern vi
 - **`InspectorControls`** — All block settings in sidebar panel, not inline in the block canvas
 - **`@wordpress/scripts`** — Build process uses `@wordpress/scripts`, not custom webpack config
 - **No inline styles** — Block styles go in `style.css` / `editor.css`, not inline in render output
+- **ACF block registration** — ACF blocks use `acf_register_block_type()` on the `acf/init` hook (not `init`); block `name` is prefixed `acf/block-name` automatically (not the theme namespace); `render_template` points to a PHP template file
+- **ACF render template safety** — All `get_field()` output must be escaped before rendering (`esc_html()`, `esc_url()`, `esc_attr()`); never use `the_field()` which outputs unescaped content
+- **Block type consistency** — A single block must not mix ACF and native block patterns; choose one approach per block
 
 These are pattern-matching checks against the block API rules. Flag clear violations only.
 

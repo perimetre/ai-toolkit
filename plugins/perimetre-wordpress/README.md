@@ -1,8 +1,8 @@
 # perimetre-wordpress
 
-**Version:** 1.0.0 — Last updated: 2026-02-18
+**Version:** 1.1.0 — Last updated: 2026-02-19
 
-Claude plugin for Périmètre WordPress development. Covers PHP coding standards, security, Gutenberg blocks, REST API, and headless WordPress patterns.
+Claude plugin for Périmètre WordPress development. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL headless API with typed `editorBlocks`, WPML translation, REST API, and i18n.
 
 ## Audience
 
