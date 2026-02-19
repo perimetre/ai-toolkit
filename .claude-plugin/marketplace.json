@@ -48,6 +48,14 @@
       "description": "Professional document writing guidance for the Périmètre team — structure, clarity, tone, and formatting for reports, proposals, and presentations.",
       "author": { "name": "Périmètre" },
       "tags": ["document", "writing", "reports", "perimetre"]
+    },
+    {
+      "name": "perimetre-discover",
+      "source": "./plugins/perimetre-discover",
+      "version": "1.0.0",
+      "description": "Plugin discovery assistant for the Périmètre marketplace. Scans your project context or reads conversational cues, then recommends the right plugins with plain-language explanations and copy-pasteable install commands.",
+      "author": { "name": "Périmètre" },
+      "tags": ["discovery", "onboarding", "marketplace", "perimetre"]
     }
   ]
 }

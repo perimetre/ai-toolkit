@@ -56,6 +56,14 @@ For the dev team building WordPress sites — PHP themes, Gutenberg blocks, cust
 
 **Agents:** `block-planner` (planning), `cpt-taxonomy-planner` (planning)
 
+### `perimetre-discover`
+
+Not sure which plugins to install? Run `/perimetre-discover:discover`. In Claude Code it silently scans your project filesystem for signals; in Claude Cowork it reads conversation context. Asks at most 3 questions, then recommends the right plugins with copy-pasteable install commands.
+
+**Skills:** `marketplace-catalog`
+
+**Commands:** `/perimetre-discover:discover`
+
 ## Updates
 
 Changes pushed to this repository become available to all users immediately. Plugins are git-based — there are no version folders to manage; the latest commit on the default branch is always the current version.
