@@ -1,6 +1,6 @@
 # perimetre-apps
 
-**Version:** 1.0.0 — Last updated: 2026-02-18
+**Version:** 1.1.0 — Last updated: 2026-02-19
 
 Claude plugin for Périmètre app development. Covers the full stack of patterns used in JS/TS/React/Next.js projects.
 
@@ -33,6 +33,15 @@ Migrated from `framework/LLMs/` — each skill covers one technology area in det
 | Skill | Description |
 |-------|-------------|
 | `code-review` | Multi-agent code review with confidence scoring and local pattern references |
+
+## Planning & Dev Agents
+
+Auto-triggered by Claude based on context — no commands needed.
+
+| Agent | Mode | Description |
+|-------|------|-------------|
+| `feature-planner` | Planning | Architecture blueprint for a new feature: service boundaries, error handling strategy, data fetching approach, tRPC procedure design, cache invalidation plan, and form structure |
+| `scaffold-advisor` | Dev | Minimal idiomatic boilerplate for a specific Périmètre pattern combination (e.g., tRPC mutation + form + optimistic update) |
 
 Invoke `/perimetre-apps:code-review` in multiple modes:
 

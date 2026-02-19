@@ -1,6 +1,6 @@
 # perimetre-design-system
 
-**Version:** 1.0.0 — Last updated: 2026-02-18
+**Version:** 1.1.0 — Last updated: 2026-02-19
 
 Claude plugin for developers working ON `@perimetre/ui` — Périmètre's brand-aware React component library.
 
@@ -15,6 +15,15 @@ Dev team creating or extending components, brand variants, and design tokens in 
 | Skill | Description |
 |-------|-------------|
 | `design-system` | Three-tier token architecture, CVA brand variants, accessibility, and component structure. Includes 11 detailed rule files. |
+
+## Planning & Dev Agents
+
+Auto-triggered by Claude based on context — no commands needed.
+
+| Agent | Mode | Description |
+|-------|------|-------------|
+| `component-planner` | Planning | Architecture blueprint for a new component: CVA structure, token needs, Radix vs. native HTML, brand-variant strategy, and a11y requirements |
+| `token-impact-analyzer` | Dev | Searches all components and brand CSS files referencing a token being changed or removed; reports breaking changes per brand |
 
 ## Code Review
 

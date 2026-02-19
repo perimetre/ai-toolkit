@@ -1,6 +1,6 @@
 # AI Toolkit
 
-**Version:** 0.1.0 — Last updated: 2026-02-18
+**Version:** 0.1.0 — Last updated: 2026-02-19
 
 Périmètre's internal plugin marketplace for Claude.
 
@@ -22,6 +22,8 @@ For the dev team building apps and prototypes with the Périmètre JS/TS/React/N
 
 **Commands:** `/perimetre-apps:code-review`
 
+**Agents:** `feature-planner` (planning), `scaffold-advisor` (dev)
+
 ### `perimetre-brand-guidelines`
 
 Loads Périmètre's visual identity guidelines into context — colours, typography, and logo usage — so every deliverable is on-brand.
@@ -36,6 +38,8 @@ For the dev team working on `@perimetre/ui` — Périmètre's brand-aware React 
 
 **Commands:** `/perimetre-design-system:code-review`
 
+**Agents:** `component-planner` (planning), `token-impact-analyzer` (dev)
+
 ### `perimetre-documents`
 
 For anyone writing professional documents — reports, proposals, and presentations. Brand-agnostic by design; pair with `perimetre-brand-guidelines` for on-brand output.
@@ -49,6 +53,8 @@ For the dev team building WordPress sites — PHP themes, Gutenberg blocks, cust
 **Skills:** `code-review`, `wordpress-patterns`
 
 **Commands:** `/perimetre-wordpress:code-review`
+
+**Agents:** `block-planner` (planning), `cpt-taxonomy-planner` (planning)
 
 ## Updates
 
