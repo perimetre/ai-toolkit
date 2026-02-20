@@ -54,20 +54,13 @@ Show this summary and stop:
 
 2. Ask the user: "New domain? (e.g. new-site.ddev.site)"
 
-3. Run a dry-run and show the output:
+3. Run the replace:
    ```
-   ddev wp search-replace '//old-domain' '//new-domain' --all-tables-with-prefix --dry-run
-   ```
-
-4. Ask: "Looks good? Run the actual replace? (yes/no)"
-
-5. If yes:
-   ```
-   ddev wp search-replace '//old-domain' '//new-domain' --all-tables-with-prefix
+   ddev wp search-replace '//old-domain' '//new-domain'
    ddev wp rewrite flush
    ```
 
-6. Confirm completion and remind the user to test the site with `ddev launch`.
+4. Confirm completion and remind the user to test the site with `ddev launch`.
 
 ---
 

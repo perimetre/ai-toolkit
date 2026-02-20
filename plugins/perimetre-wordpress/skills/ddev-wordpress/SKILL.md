@@ -31,13 +31,10 @@ Supported formats: `.sql`, `.sql.gz`, `.zip` (containing a `.sql` file).
 Use the `//` prefix to catch both `http://` and `https://` in a single pass.
 
 ```bash
-# 1. Preview changes (dry run)
-ddev wp search-replace '//old-domain.com' '//new-domain.com' --all-tables-with-prefix --dry-run
+# 1. Run the replace
+ddev wp search-replace '//old-domain.com' '//new-domain.com'
 
-# 2. Run the actual replace
-ddev wp search-replace '//old-domain.com' '//new-domain.com' --all-tables-with-prefix
-
-# 3. Flush rewrite rules (also fixes WPGraphQL endpoint issues)
+# 2. Flush rewrite rules (also fixes WPGraphQL endpoint issues)
 ddev wp rewrite flush
 ```
 
