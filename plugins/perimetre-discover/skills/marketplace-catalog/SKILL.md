@@ -12,11 +12,14 @@ This is the authoritative reference for all plugins available in the Périmètre
 
 ## Marketplace Install Command
 
-The single install command for the entire marketplace:
-
+**Claude Code:**
 ```
 /plugin marketplace add https://github.com/perimetre/ai-toolkit
 ```
+
+**Claude Cowork:** There is a UI option to add a marketplace from GitHub using `perimetre/ai-toolkit`. Updates are manual via the "Check for updates" option on the installed marketplace entry.
+
+Note: both environments detect updates via the `version` field in `plugin.json` — a content change without a version bump will not be picked up.
 
 After installing, all plugins are available. Users enable or disable individual plugins from their Claude settings. All plugins coexist without conflict.
 

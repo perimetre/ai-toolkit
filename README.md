@@ -1,89 +1,195 @@
-# AI Toolkit
+# Périmètre AI Toolkit
 
-**Version:** 0.1.0 — Last updated: 2026-02-19
+**Version:** 0.3.0 — Last updated: 2026-02-20
 
-Périmètre's internal plugin marketplace for Claude.
+Périmètre's internal plugin marketplace for Claude. Gives Claude deep knowledge of Périmètre's tools, patterns, and standards — for developers, designers, writers, and project managers.
+
+---
 
 ## Installation
 
-Add this marketplace to Claude:
+### Claude Code
 
-```
+Add the marketplace with one command:
+
+```bash
 /plugin marketplace add https://github.com/perimetre/ai-toolkit
 ```
 
-## Plugins
+To update manually when new plugins or improvements are released:
 
-### `perimetre-apps`
-
-For the dev team building apps and prototypes with the Périmètre JS/TS/React/Next.js stack.
-
-**Skills:** `error-handling`, `services`, `trpc`, `forms`, `graphql`, `tanstack-query`, `icons`, `images`, `seo`, `caching`, `payload-drizzle`, `code-review`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `web-animation-design`, `emil-design-engineering`
-
-**Commands:** `/perimetre-apps:code-review`
-
-**Agents:** `feature-planner` (planning), `scaffold-advisor` (dev)
-
-### `perimetre-brand-guidelines`
-
-Loads Périmètre's visual identity guidelines into context — colours, typography, and logo usage — so every deliverable is on-brand.
-
-**Skills:** `brand-guidelines`
-
-### `perimetre-design-system`
-
-For the dev team working on `@perimetre/ui` — Périmètre's brand-aware React component library. Not for consumers; use `perimetre-apps` if you're building apps that use the design system.
-
-**Skills:** `design-system`
-
-**Commands:** `/perimetre-design-system:code-review`
-
-**Agents:** `component-planner` (planning), `token-impact-analyzer` (dev)
-
-### `perimetre-documents`
-
-For anyone writing professional documents — reports, proposals, and presentations. Brand-agnostic by design; pair with `perimetre-brand-guidelines` for on-brand output.
-
-**Skills:** `document`
-
-### `perimetre-wordpress`
-
-For the dev team building WordPress sites — PHP themes, Gutenberg blocks, custom plugins, and headless WP with Next.js.
-
-**Skills:** `code-review`, `wordpress-patterns`
-
-**Commands:** `/perimetre-wordpress:code-review`
-
-**Agents:** `block-planner` (planning), `cpt-taxonomy-planner` (planning)
-
-### `perimetre-discover`
-
-Not sure which plugins to install? Run `/perimetre-discover:discover`. In Claude Code it silently scans your project filesystem for signals; in Claude Cowork it reads conversation context. Asks at most 3 questions, then recommends the right plugins with copy-pasteable install commands.
-
-**Skills:** `marketplace-catalog`
-
-**Commands:** `/perimetre-discover:discover`, `/perimetre-discover:list`
-
-## Updates
-
-Changes pushed to this repository become available to all users immediately. Plugins are git-based — there are no version folders to manage; the latest commit on the default branch is always the current version.
-
-**To update manually:**
-```
+```bash
 /plugin marketplace update perimetre-ai-toolkit
 ```
 
-**To enable auto-update** (off by default for third-party marketplaces):
-```
-/plugin → Marketplaces → perimetre-ai-toolkit → Enable auto-update
-```
-When enabled, Claude checks for updates on startup and prompts a restart if anything has changed.
+### Claude Cowork
 
-## Structure
+Cowork has a UI option to add a marketplace from GitHub — use `perimetre/ai-toolkit`. Updates are manual via the "Check for updates" option on the installed marketplace entry.
 
-- `.claude-plugin/` — Marketplace manifest and configuration
-- `plugins/` — Individual plugin packages
+> Updates in both Claude Code and Cowork are version-based — a new version is only detected if the `version` field in the plugin manifest has been bumped.
 
-## Adding a Plugin
+Org-wide plugin provisioning is planned by Anthropic but not yet available — installation is per-user.
 
-Add a new folder under `plugins/` following the structure of an existing plugin, then register it in `.claude-plugin/marketplace.json`.
+---
+
+## Plugins
+
+Not sure where to start? Install `perimetre-discover` first — it will recommend the right plugins for your project.
+
+---
+
+### `perimetre-discover` ← Start here if unsure
+
+**Version:** 1.1.0
+
+Plugin discovery assistant. Scans your project or reads conversation context, then recommends the right plugins with plain-language explanations and install commands.
+
+**Audience:** Anyone new to the Périmètre marketplace, or unsure which plugins apply to their work. Works for developers, designers, writers, and non-technical team members.
+
+**Skills:**
+
+- `marketplace-catalog` — Complete catalog of all plugins with target personas, signals, and install commands
+
+**Commands:**
+
+- `/perimetre-discover:discover` — Detects context, asks up to 3 questions if needed, and recommends plugins with reasons
+- `/perimetre-discover:list` — Lists all available plugins with descriptions and target personas
+
+---
+
+### `perimetre-apps`
+
+**Version:** 1.1.0
+
+Plugin for JavaScript/TypeScript app development at Périmètre. Covers the full React/Next.js stack — framework patterns, code review, and planning agents.
+
+**Audience:** Developers building apps and prototypes with the Périmètre JS/TS/React/Next.js stack.
+
+**Skills:**
+
+- `error-handling` — Error-as-values pattern using discriminated unions
+- `services` — Service layer architecture and `defineService`
+- `trpc` — tRPC routers, procedures, and middleware
+- `forms` — React Hook Form + Zod, shared schema, i18n errors
+- `graphql` — GraphQL with TanStack Query and codegen
+- `tanstack-query` — `queryOptions` factory, prefetching, cache invalidation
+- `icons` — `@perimetre/icons`, `Icon` wrapper, accessibility
+- `images` — Next.js `Image` component, fill, sizes, LCP
+- `seo` — `generateMetadata`, Open Graph, JSON-LD, sitemap
+- `caching` — Next.js fetch cache, `React.cache`, `unstable_cache`
+- `payload-drizzle` — Payload CMS + Drizzle ORM integration
+- `code-review` — Multi-agent review with confidence scoring
+- `vercel-react-best-practices` — 57 performance rules across 8 categories
+- `vercel-composition-patterns` — Compound components, React 19 patterns
+- `web-design-guidelines` — UI compliance against Vercel Interface Guidelines
+- `web-animation-design` — Easing, timing, springs, `prefers-reduced-motion`
+- `emil-design-engineering` — UI polish, touch, accessibility, marketing
+
+**Commands:**
+
+- `/perimetre-apps:code-review` — Multi-agent code review (supports changes, PR, path, and GitHub PR modes)
+
+**Agents:**
+
+- `feature-planner` — Architecture blueprint for a new feature
+- `scaffold-advisor` — Minimal idiomatic boilerplate for a pattern combination
+
+---
+
+### `perimetre-brand-guidelines`
+
+**Version:** 1.0.0
+
+Loads Périmètre's visual identity into Claude's context — colours, typography, and logo usage — so every deliverable is on-brand.
+
+**Audience:** Anyone producing deliverables that carry the Périmètre name: developers, designers, writers, and project managers. Lightweight — install it alongside any other plugin.
+
+**Skills:**
+
+- `brand-guidelines` — Colour palette (Carbon `#111111`, Steel `#737678`, Aqua `#13FADC`), Satoshi typeface rules, logo usage, tone of voice
+
+**Commands:** None — the skill activates automatically for brand-related content.
+
+---
+
+### `perimetre-design-system`
+
+**Version:** 1.1.0
+
+Plugin for developers building or extending `@perimetre/ui` — Périmètre's brand-aware React component library built on Tailwind CSS v4, CVA, and Radix UI.
+
+**Audience:** Developers working **on** the `@perimetre/ui` package itself. Not for apps that consume the library — use `perimetre-apps` for that.
+
+**Skills:**
+
+- `design-system` — Three-tier token architecture, CVA brand variants, `compose()` patterns, accessibility, RSC compatibility. Includes 11 detailed rule files.
+
+**Commands:**
+
+- `/perimetre-design-system:code-review` — Multi-agent code review for design system component work
+
+**Agents:**
+
+- `component-planner` — Architecture blueprint for a new component
+- `token-impact-analyzer` — Scans for breaking changes when modifying a design token
+
+---
+
+### `perimetre-documents`
+
+**Version:** 1.0.0
+
+Plugin for professional document writing at Périmètre. Covers structure, clarity, tone, and formatting for reports, proposals, and presentations.
+
+**Audience:** Anyone on the Périmètre team writing professional documents — developers writing specs, project managers, or non-technical team members producing client-facing deliverables. Pair with `perimetre-brand-guidelines` for on-brand output.
+
+**Skills:**
+
+- `document` — Leading with the conclusion, one-idea-per-section, heading hierarchy, concise prose, client-facing tone, executive summary structure
+
+**Commands:** None — the skill activates automatically when Claude writes or reviews a document.
+
+---
+
+### `perimetre-wordpress`
+
+**Version:** 1.2.0
+
+Plugin for WordPress development at Périmètre. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL, WPML, REST API extensions, and i18n.
+
+**Audience:** Developers building WordPress sites — PHP themes, Gutenberg blocks, custom plugins, and headless WordPress with Next.js.
+
+**Skills:**
+
+- `code-review` — WordPress-specific review: WPCS, security, hooks, Gutenberg, i18n, query performance
+- `wordpress-patterns` — Theme structure, CPTs, block development with `@wordpress/scripts`, ACF Pro, WPGraphQL, WPML, REST API, headless WP + Next.js
+
+**Commands:**
+
+- `/perimetre-wordpress:code-review` — Multi-agent review across 5 parallel specialized agents (security, WPCS, Gutenberg, hooks, i18n/performance)
+
+**Agents:**
+
+- `block-planner` — Architecture blueprint for a new Gutenberg block
+- `cpt-taxonomy-planner` — CPT and taxonomy registration, WPGraphQL, WPML strategy
+
+---
+
+## Recommended stacks
+
+| Context | Install these |
+|---------|---------------|
+| Front-end / full-stack JS app | `perimetre-apps` + `perimetre-brand-guidelines` |
+| Design system work | `perimetre-apps` + `perimetre-design-system` + `perimetre-brand-guidelines` |
+| WordPress site | `perimetre-wordpress` + `perimetre-brand-guidelines` |
+| Headless WP + Next.js | `perimetre-wordpress` + `perimetre-apps` |
+| Document / writing work | `perimetre-documents` + `perimetre-brand-guidelines` |
+| Everything | Install all — they don't conflict |
+
+---
+
+## For maintainers
+
+- **No build step** — committing to `main` is the deployment. Changes are available to all users after they manually update (`/plugin marketplace update` in Claude Code; "Check for updates" in Cowork). **Always bump the `version` field in `plugin.json`** — both clients skip updates if the version hasn't changed.
+- **Adding a plugin** — create `plugins/[plugin-name]/` following the structure of an existing plugin, then register it in `.claude-plugin/marketplace.json`.
+- **Repository layout** — `.claude-plugin/` holds the marketplace manifest; `plugins/` holds the individual plugin packages.
