@@ -1,6 +1,6 @@
 # perimetre-discover
 
-**Version:** 1.0.0 — Last updated: 2026-02-19
+**Version:** 1.1.0 — Last updated: 2026-02-20
 
 Plugin discovery assistant for the Périmètre marketplace. Scans your project context (in Claude Code) or reads conversational cues (in Claude Cowork), asks at most a few targeted questions, then recommends the right plugins with plain-language explanations and copy-pasteable install commands.
 
@@ -13,6 +13,7 @@ Run `/perimetre-discover:discover` when you're not sure which Périmètre plugin
 | Command | Description |
 |---------|-------------|
 | `/perimetre-discover:discover` | Detect context, ask up to 3 questions, and recommend plugins |
+| `/perimetre-discover:list` | List all available plugins with descriptions |
 
 ## How it works
 

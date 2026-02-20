@@ -62,7 +62,7 @@ Not sure which plugins to install? Run `/perimetre-discover:discover`. In Claude
 
 **Skills:** `marketplace-catalog`
 
-**Commands:** `/perimetre-discover:discover`
+**Commands:** `/perimetre-discover:discover`, `/perimetre-discover:list`
 
 ## Updates
 
