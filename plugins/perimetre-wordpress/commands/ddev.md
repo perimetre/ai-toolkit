@@ -39,7 +39,7 @@ Show this summary and stop:
 
 1. Ask the user: "Path to the database file to import?"
 
-2. Run the import:
+2. Run the import directly (not in background — completes in seconds):
    ```
    ddev import-db --file=<path>
    ```
@@ -54,7 +54,7 @@ Show this summary and stop:
 
 2. Ask the user: "New domain? (e.g. new-site.ddev.site)"
 
-3. Run the replace:
+3. Run the replace directly (not in background — completes in seconds):
    ```
    ddev wp search-replace '//old-domain' '//new-domain'
    ddev wp rewrite flush
