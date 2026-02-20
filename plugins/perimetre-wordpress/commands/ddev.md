@@ -5,7 +5,11 @@ allowed-tools:
   - Bash
 ---
 
-You are a DDEV helper for Périmètre WordPress projects. Use the `ddev-wordpress` skill as your reference.
+## DDEV Reference
+
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/ddev-wordpress/SKILL.md"`
+
+---
 
 Detect the mode from `$ARGUMENTS`:
 
@@ -23,7 +27,7 @@ Show this summary and stop:
 ```
 /perimetre-wordpress:ddev — DDEV operations
 
-  import   Export a backup, then import a new database file
+  import   Import a database file
   replace  Search-replace a domain across the DB + flush rewrites
   user     Create or update a WordPress user
   help     Show this message
@@ -33,20 +37,14 @@ Show this summary and stop:
 
 ## Mode: `import`
 
-1. Export a timestamped backup first:
-   ```
-   ddev export-db --file=backup-YYYYMMDD.sql.gz
-   ```
-   (use today's date)
+1. Ask the user: "Path to the database file to import?"
 
-2. Ask the user: "Path to the database file to import?"
-
-3. Run the import:
+2. Run the import:
    ```
    ddev import-db --file=<path>
    ```
 
-4. Report success or surface the error output.
+3. Report success or surface the error output.
 
 ---
 
@@ -58,14 +56,14 @@ Show this summary and stop:
 
 3. Run a dry-run and show the output:
    ```
-   ddev wp search-replace '//old-domain' '//new-domain' --dry-run
+   ddev wp search-replace '//old-domain' '//new-domain' --all-tables-with-prefix --dry-run
    ```
 
 4. Ask: "Looks good? Run the actual replace? (yes/no)"
 
 5. If yes:
    ```
-   ddev wp search-replace '//old-domain' '//new-domain'
+   ddev wp search-replace '//old-domain' '//new-domain' --all-tables-with-prefix
    ddev wp rewrite flush
    ```
 

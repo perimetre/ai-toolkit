@@ -1,6 +1,6 @@
 # perimetre-wordpress
 
-**Version:** 1.3.0 — Last updated: 2026-02-20
+**Version:** 1.3.1 — Last updated: 2026-02-20
 
 Plugin for WordPress development at Périmètre. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL, WPML, REST API extensions, and i18n.
 

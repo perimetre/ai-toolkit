@@ -20,13 +20,7 @@ ddev describe       # Show project URLs, services, and status
 
 ## Database Import
 
-Always export a backup before importing:
-
 ```bash
-# 1. Export current DB as backup
-ddev export-db --file=backup-$(date +%Y%m%d).sql.gz
-
-# 2. Import new DB
 ddev import-db --file=path/to/dump.sql.gz
 ```
 
@@ -38,10 +32,10 @@ Use the `//` prefix to catch both `http://` and `https://` in a single pass.
 
 ```bash
 # 1. Preview changes (dry run)
-ddev wp search-replace '//old-domain.com' '//new-domain.com' --dry-run
+ddev wp search-replace '//old-domain.com' '//new-domain.com' --all-tables-with-prefix --dry-run
 
 # 2. Run the actual replace
-ddev wp search-replace '//old-domain.com' '//new-domain.com'
+ddev wp search-replace '//old-domain.com' '//new-domain.com' --all-tables-with-prefix
 
 # 3. Flush rewrite rules (also fixes WPGraphQL endpoint issues)
 ddev wp rewrite flush

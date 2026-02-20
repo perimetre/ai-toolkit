@@ -1,6 +1,6 @@
 {
   "name": "perimetre-wordpress",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "WordPress development patterns and code review for Périmètre projects. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL headless API with editorBlocks, WPML translation, REST API extensions, and i18n.",
   "author": {
     "name": "Périmètre"
