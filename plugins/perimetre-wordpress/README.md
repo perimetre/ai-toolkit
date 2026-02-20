@@ -1,6 +1,6 @@
 # perimetre-wordpress
 
-**Version:** 1.2.0 — Last updated: 2026-02-19
+**Version:** 1.3.0 — Last updated: 2026-02-20
 
 Plugin for WordPress development at Périmètre. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL, WPML, REST API extensions, and i18n.
 
@@ -16,12 +16,14 @@ Developers building WordPress sites — PHP themes, Gutenberg blocks, custom plu
 |-------|----------------|
 | `code-review` | WordPress-specific code review: PHP coding standards (WPCS), security (nonces, capability checks, sanitization, escaping), hook patterns, Gutenberg blocks, REST API, i18n compliance, and query performance |
 | `wordpress-patterns` | Development best practices: theme structure, custom post types and taxonomies, Gutenberg block development with `@wordpress/scripts`, ACF Pro, WPGraphQL typed `editorBlocks`, WPML translation strategies, REST API extensions, headless WP + Next.js integration, and security checklist |
+| `ddev-wordpress` | DDEV local environment operations: start/stop/restart/launch, database import with backup, domain search-replace with rewrite flush, and user create/update |
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
 | `/perimetre-wordpress:code-review` | Multi-agent WordPress code review across 5 specialized agents |
+| `/perimetre-wordpress:ddev` | Interactive DDEV operations: db import, domain search-replace, user management |
 
 **Supported modes:**
 
