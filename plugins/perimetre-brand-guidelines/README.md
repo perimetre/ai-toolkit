@@ -2,27 +2,23 @@
 
 **Version:** 1.0.0 — Last updated: 2026-02-18
 
-A plugin for keeping Claude aligned with Périmètre's visual identity. It loads the brand guidelines — colours, typography, and logo usage — directly into context so that any deliverable Claude produces is consistent and on-brand.
+Loads Périmètre's visual identity into Claude's context — colours, typography, and logo usage — so every deliverable looks and feels on-brand.
+
+## Audience
+
+Anyone producing deliverables that carry the Périmètre name: developers, designers, writers, and project managers. Lightweight and broadly useful — install it alongside any other plugin for on-brand output.
+
+Pairs especially well with:
+- `perimetre-documents` — brand-aware document writing
+- `perimetre-apps` — on-brand UI and component work
 
 ## Skills
 
-### `brand-guidelines`
+| Skill | What it covers |
+|-------|----------------|
+| `brand-guidelines` | Colour palette (Carbon, Steel, Aqua), Satoshi typeface rules, logo usage and restrictions, application guidelines for documents and presentations, tone of voice principles |
 
-Loads Périmètre's full brand identity into Claude's context for the session.
-
-**Use it when:**
-- Creating a document, presentation, or PDF that represents Périmètre
-- Writing external communications (emails, proposals, reports)
-- Producing any visual or written content that carries the Périmètre name
-
-**What it covers:**
-- Colour palette: Carbon (`#111111`), Steel (`#737678`), Aqua (`#13FADC`)
-- Typography: Satoshi typeface, weight scale, hierarchy rules
-- Logo usage: approved colour combinations, minimum sizes, what to avoid
-- Application rules for documents, presentations, and emails
-- Tone of voice principles
-
-## Colour Quick Reference
+**Colour quick reference:**
 
 | Name | HEX | Role |
 |------|-----|------|
@@ -30,17 +26,8 @@ Loads Périmètre's full brand identity into Claude's context for the session.
 | Steel | `#737678` | Secondary text, borders, captions |
 | Aqua | `#13FADC` | Accent, highlights, CTAs |
 
-## Usage
+## Commands
 
-To activate the brand guidelines skill in a session, mention it in your request:
+This plugin has no commands — the `brand-guidelines` skill activates automatically when Claude produces brand-related content, or you can invoke it explicitly by mentioning it in your request:
 
-> "Using the brand-guidelines skill, write an email to a client..."
-
-Or load it explicitly at the start of a session to keep all outputs on-brand for the full conversation.
-
-## Version History
-
-| Version | Date | Notes |
-|---------|------|-------|
-| 1.0.0 | 2026-02-18 | Initial release — colours, typography, logo usage |
-
+> "Using the brand-guidelines skill, write an email to a client about the project update."
