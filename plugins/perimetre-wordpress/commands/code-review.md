@@ -1,5 +1,5 @@
 ---
-description: "WordPress code review: security, WPCS, Gutenberg, i18n, and query performance. Supports changes, PR, path, and GitHub PR modes."
+description: "WordPress code review: security, WPCS, Gutenberg, i18n, query performance, and HTML standards. Supports changes, PR, path, and GitHub PR modes."
 argument-hint: "[--pr [number] | <path> | --all]"
 allowed-tools: [Read, Grep, Glob, Bash, Task]
 ---
@@ -52,28 +52,31 @@ Launch parallel agents based on mode:
 
 **`github-pr` mode** (diff already in context, no local git):
 
-Launch **4 parallel agents** (skip `hooks-history-reviewer` — no local git):
+Launch **5 parallel agents** (skip `hooks-history-reviewer` — no local git):
 - Use the `security-reviewer` agent to audit for WordPress security vulnerabilities (nonces, capabilities, sanitization, escaping, REST API permissions, DB queries)
 - Use the `wpcs-reviewer` agent to check PHP coding standards (naming, hooks, type declarations, tabs, DocBlocks)
 - Use the `gutenberg-reviewer` agent to review block patterns (block.json, dynamic blocks, useBlockProps, InspectorControls, @wordpress/scripts)
 - Use the `i18n-performance-reviewer` agent to check i18n compliance and query performance (text domain, no -1 per_page, no_found_rows, N+1 queries)
+- Use the `html-standards-reviewer` agent to check HTML coding standards (self-closing elements, lowercase tags/attributes, quoted attributes, boolean attribute values, tab indentation, PHP/HTML mixing alignment)
 
 **`changes` mode or `pr` mode** (diff available):
 
-Launch **5 parallel agents**:
+Launch **6 parallel agents**:
 - Use the `security-reviewer` agent to audit for WordPress security vulnerabilities (nonces, capabilities, sanitization, escaping, REST API permissions, DB queries)
 - Use the `wpcs-reviewer` agent to check PHP coding standards (naming, hooks, type declarations, tabs, DocBlocks)
 - Use the `gutenberg-reviewer` agent to review block patterns (block.json, dynamic blocks, useBlockProps, InspectorControls, @wordpress/scripts)
 - Use the `i18n-performance-reviewer` agent to check i18n compliance and query performance (text domain, no -1 per_page, no_found_rows, N+1 queries)
 - Use the `hooks-history-reviewer` agent to audit hook patterns and check for regressions via git history
+- Use the `html-standards-reviewer` agent to check HTML coding standards (self-closing elements, lowercase tags/attributes, quoted attributes, boolean attribute values, tab indentation, PHP/HTML mixing alignment)
 
 **`path` mode** (no diff — agents read files directly):
 
-Launch **4 parallel agents** (skip `hooks-history-reviewer` — `git blame` is meaningless without a diff):
+Launch **5 parallel agents** (skip `hooks-history-reviewer` — `git blame` is meaningless without a diff):
 - Use the `security-reviewer` agent to audit the code at the given path for WordPress security vulnerabilities; instruct it to read files directly and **cap findings at 5 most critical issues**
 - Use the `wpcs-reviewer` agent to audit the code at the given path for PHP coding standards; instruct it to read files directly and **cap findings at 5 most critical issues**
 - Use the `gutenberg-reviewer` agent to audit the code at the given path for block pattern issues; instruct it to read files directly and **cap findings at 5 most critical issues**
 - Use the `i18n-performance-reviewer` agent to audit the code at the given path for i18n and performance issues; instruct it to read files directly and **cap findings at 5 most critical issues**
+- Use the `html-standards-reviewer` agent to audit the code at the given path for HTML coding standards violations; instruct it to read files directly and **cap findings at 5 most critical issues**
 
 Each agent returns a list of issues with the reason each was flagged.
 
@@ -104,7 +107,7 @@ Found [N] issues:
 
 1. **[Brief issue description]** (Confidence: [score])
 
-**Category:** Security | WPCS | Gutenberg | i18n | Performance | Hooks
+**Category:** Security | WPCS | Gutenberg | i18n | Performance | Hooks | HTML
 
 **File:** `[path/to/file.php:line]`
 

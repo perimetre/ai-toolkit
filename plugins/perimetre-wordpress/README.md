@@ -1,6 +1,6 @@
 # perimetre-wordpress
 
-**Version:** 1.3.3 — Last updated: 2026-02-20
+**Version:** 1.3.4 — Last updated: 2026-02-24
 
 Plugin for WordPress development at Périmètre. Covers PHP coding standards, security, Gutenberg blocks (native and ACF Pro), WPGraphQL, WPML, REST API extensions, and i18n.
 
@@ -14,7 +14,7 @@ Developers building WordPress sites — PHP themes, Gutenberg blocks, custom plu
 
 | Skill | What it covers |
 |-------|----------------|
-| `code-review` | WordPress-specific code review: PHP coding standards (WPCS), security (nonces, capability checks, sanitization, escaping), hook patterns, Gutenberg blocks, REST API, i18n compliance, and query performance |
+| `code-review` | WordPress-specific code review: PHP coding standards (WPCS), security (nonces, capability checks, sanitization, escaping), HTML coding standards, hook patterns, Gutenberg blocks, REST API, i18n compliance, and query performance |
 | `wordpress-patterns` | Development best practices: theme structure, custom post types and taxonomies, Gutenberg block development with `@wordpress/scripts`, ACF Pro, WPGraphQL typed `editorBlocks`, WPML translation strategies, REST API extensions, headless WP + Next.js integration, and security checklist |
 | `ddev-wordpress` | DDEV local environment operations: start/stop/restart/launch, database import, domain search-replace with rewrite flush, and user create/update |
 
@@ -22,7 +22,7 @@ Developers building WordPress sites — PHP themes, Gutenberg blocks, custom plu
 
 | Command | Description |
 |---------|-------------|
-| `/perimetre-wordpress:code-review` | Multi-agent WordPress code review across 5 specialized agents |
+| `/perimetre-wordpress:code-review` | Multi-agent WordPress code review across 6 specialized agents |
 | `/perimetre-wordpress:ddev` | Interactive DDEV operations: db import, domain search-replace, user management |
 
 **Supported modes:**
@@ -39,10 +39,11 @@ Developers building WordPress sites — PHP themes, Gutenberg blocks, custom plu
 | Agent | What it checks |
 |-------|----------------|
 | `security-reviewer` | Nonces, capability checks, sanitization, escaping, REST API permissions, DB query safety |
-| `wpcs-reviewer` | PHP naming conventions, Yoda conditions, type declarations, tabs, DocBlocks |
+| `wpcs-reviewer` | PHP naming conventions, Yoda conditions, type declarations, tabs, DocBlocks, single quotes, array syntax, type casts, `elseif`, `extract()`, `@` operator, control structure spacing |
 | `gutenberg-reviewer` | `block.json`, dynamic blocks, `useBlockProps`, `InspectorControls`, `@wordpress/scripts` |
 | `hooks-history-reviewer` | Lifecycle hook usage, prefixed callbacks, and git-based regression detection |
 | `i18n-performance-reviewer` | Text domain compliance, string wrapping, and `WP_Query` efficiency |
+| `html-standards-reviewer` | Self-closing element spacing, lowercase tags/attributes, quoted attributes, boolean attribute values, tab indentation, PHP/HTML mixing alignment |
 
 ## Agents
 
@@ -52,3 +53,4 @@ Auto-triggered by Claude based on context — no commands needed.
 |-------|-------------------|--------------|
 | `block-planner` | Planning a new Gutenberg block | Architecture blueprint: native vs. ACF decision, field structure, WPGraphQL schema, WPML strategy, rendering approach, and `block.json` skeleton |
 | `cpt-taxonomy-planner` | Planning custom post types or taxonomies | CPT registration args, taxonomy structure, REST API visibility, WPGraphQL type names, WPML strategy, and required hooks |
+| `html-standards-reviewer` | Reviewing HTML output in templates or blocks | WordPress HTML coding standards: self-closing elements, attribute quoting, lowercase tags, indentation, and PHP/HTML mixing alignment |

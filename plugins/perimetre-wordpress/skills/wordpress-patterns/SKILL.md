@@ -608,3 +608,94 @@ Run through this checklist before shipping any WordPress code:
 - [ ] **REST API** — All non-public endpoints have proper `permission_callback`
 - [ ] **No hardcoded credentials** — All secrets in `wp-config.php` or environment variables
 - [ ] **HTTPS** — `is_ssl()` check or forced via server config
+
+---
+
+## HTML Coding Standards
+
+WordPress HTML output must pass W3C validation and follow these formatting rules:
+
+### Self-Closing Elements
+
+Void elements must include one space before the closing slash:
+
+```html
+<!-- ✅ Correct -->
+<br />
+<img src="photo.jpg" alt="Photo" />
+<input type="text" name="field" />
+
+<!-- ❌ Wrong — no space before slash -->
+<br/>
+<img src="photo.jpg" alt="Photo"/>
+```
+
+### Lowercase Tags and Attributes
+
+All HTML tags and machine-readable attribute values must be lowercase. Human-readable values (e.g., `alt` text, visible labels) use proper capitalization.
+
+```html
+<!-- ✅ Correct -->
+<div class="hero-block" data-type="featured">
+
+<!-- ❌ Wrong — uppercase tag or attribute -->
+<DIV CLASS="hero-block">
+```
+
+### Attribute Quoting
+
+All attribute values must be quoted. Unquoted attributes are invalid.
+
+```html
+<!-- ✅ Correct -->
+<input type="text" name="field" />
+
+<!-- ❌ Wrong — unquoted attribute value -->
+<input type=text name=field />
+```
+
+### Boolean Attributes
+
+Boolean attributes must be written with an explicit value — never as bare attributes:
+
+```html
+<!-- ✅ Correct -->
+<input type="checkbox" disabled="disabled" />
+<option value="1" selected="selected">One</option>
+
+<!-- ❌ Wrong — bare boolean attribute -->
+<input type="checkbox" disabled />
+```
+
+### Indentation
+
+Use tabs (not spaces). HTML structure must reflect logical nesting:
+
+```html
+<div class="container">
+	<ul>
+		<li>Item one</li>
+		<li>Item two</li>
+	</ul>
+</div>
+```
+
+### PHP/HTML Mixing
+
+When mixing PHP and HTML, PHP blocks must be indented to match the surrounding HTML. The closing PHP tag `?>` aligns with the opening `<?php`:
+
+```php
+<!-- ✅ Correct -->
+<div class="entry">
+	<?php if ( $show_title ) : ?>
+		<h2><?php echo esc_html( $title ); ?></h2>
+	<?php endif; ?>
+</div>
+
+<!-- ❌ Wrong — PHP not indented to match HTML -->
+<div class="entry">
+<?php if ( $show_title ) : ?>
+<h2><?php echo esc_html( $title ); ?></h2>
+<?php endif; ?>
+</div>
+```

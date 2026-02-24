@@ -96,6 +96,17 @@ Review internationalization and database usage:
 - No direct DB queries (`$wpdb->get_results`) where `WP_Query` or core APIs suffice
 - No N+1 queries in loops (e.g., calling `get_post_meta()` inside `foreach` over posts)
 
+**Agent #6: HTML Standards**
+
+Review for WordPress HTML coding standards violations:
+
+- **Self-closing elements** — Void elements (`<br />`, `<img />`, `<input />`) must have one space before the closing slash
+- **Lowercase tags and attributes** — All tags and machine-readable attribute values must be lowercase
+- **Attribute quoting** — All attribute values must be quoted; omitting quotes is invalid
+- **Boolean attributes** — Must be written with explicit value: `disabled="disabled"` not bare `disabled`
+- **Tab indentation** — HTML uses tabs, not spaces; structure reflects logical nesting
+- **PHP/HTML mixing** — PHP blocks indented to match surrounding HTML; closing PHP block aligns with opening block
+
 **Agent #5: Hook Patterns & Historical Context**
 
 Review hook usage and code history:
@@ -137,7 +148,7 @@ Found [N] issues:
 
 1. **[Brief issue description]** (Confidence: [score])
 
-**Category:** Security | WPCS | Gutenberg | i18n | Performance | Hooks
+**Category:** Security | WPCS | Gutenberg | i18n | Performance | Hooks | HTML
 
 **File:** `[path/to/file.php:line]`
 

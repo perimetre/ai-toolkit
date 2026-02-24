@@ -22,6 +22,14 @@ Your job is to audit the git diff for WordPress PHP coding standards violations.
 - **DocBlocks** — Public functions must have DocBlocks with `@param` and `@return`
 - **`wpdb` globals** — Access via `global $wpdb;` not `$GLOBALS['wpdb']`
 - **Deprecated functions** — No use of deprecated WP functions
+- **Single quotes** — Use single quotes when not evaluating variables; alternate quotes to avoid escaping (e.g. `echo '<a href="/link">Text</a>';`)
+- **`require_once` over `include_once`** — Always use `require_once` to produce a fatal error if files are missing; no parentheses around the path
+- **Long array syntax** — Use `array()` not `[]` (WPCS prefers long syntax for readability)
+- **Type cast format** — Use canonical lowercase short forms only: `(bool)`, `(int)`, `(float)` — not `(boolean)`, `(integer)`
+- **`elseif` not `else if`** — Always one word `elseif`
+- **No `extract()`** — Prohibited due to variable injection security risk and readability concerns
+- **No error control operator `@`** — Discouraged; handle errors explicitly instead
+- **Control structure spacing** — Space after keyword before `(`, spaces inside parens of control blocks: `if ( $x )`, `foreach ( $foo as $bar )`; no space between `case` and `:`
 
 Focus on patterns that are deterministic — these are standards matching tasks, not inferences.
 
