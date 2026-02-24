@@ -1,6 +1,6 @@
 # Périmètre AI Toolkit
 
-**Version:** 0.3.0 — Last updated: 2026-02-20
+**Version:** 0.4.0 — Last updated: 2026-02-24
 
 Périmètre's internal plugin marketplace for Claude. Gives Claude deep knowledge of Périmètre's tools, patterns, and standards — for developers, designers, writers, and project managers.
 
@@ -175,6 +175,32 @@ Plugin for WordPress development at Périmètre. Covers PHP coding standards, se
 
 ---
 
+### `perimetre-a11y`
+
+**Version:** 1.1.0
+
+Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law, and produces a prioritized report.
+
+**Audience:** Developers and QA engineers who need to audit web properties for WCAG 2.2 compliance and Canadian legal requirements (Federal ACA, Ontario AODA, Quebec SGQRI/Charter). Works in degraded mode when Playwright or scanners are unavailable.
+
+**Skills:**
+
+- `wcag-standards` — POUR principles, Level A/AA SC reference, common failure patterns, DOM inspection checklist (13 checks), scoring formula
+- `canadian-accessibility-law` — Federal/Ontario/Quebec jurisdiction table, SC-level legal signal lookup, citation formats, multi-jurisdiction guidance
+
+**Commands:**
+
+- `/perimetre-a11y:audit <url> [--jurisdiction global|federal|ontario|quebec] [--depth N]` — Full 4-stage pipeline: crawl → scan → map → report
+
+**Agents:**
+
+- `web-crawler` — BFS Playwright crawler with 13 per-page DOM checks (gracefully degrades if Playwright unavailable)
+- `scanner-runner` — pa11y / axe-core / Lighthouse runner, best-effort (degrades if scanners not installed)
+- `standards-mapper` — Normalizes, deduplicates, scores 0–100, adds law citations
+- `report-writer` — Produces structured HIGH/MEDIUM/LOW Markdown report
+
+---
+
 ## Recommended stacks
 
 | Context | Install these |
@@ -184,6 +210,7 @@ Plugin for WordPress development at Périmètre. Covers PHP coding standards, se
 | WordPress site | `perimetre-wordpress` + `perimetre-brand-guidelines` |
 | Headless WP + Next.js | `perimetre-wordpress` + `perimetre-apps` |
 | Document / writing work | `perimetre-documents` + `perimetre-brand-guidelines` |
+| Accessibility audit | `perimetre-a11y` |
 | Everything | Install all — they don't conflict |
 
 ---
