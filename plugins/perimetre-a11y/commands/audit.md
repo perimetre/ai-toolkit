@@ -184,12 +184,12 @@ If **any** tool is missing (pa11y, axe, Lighthouse, or agent-browser):
    - pa11y: `npm install -g pa11y`
    - axe: `npm install -g axe-cli`
    - Lighthouse: `npm install -g lighthouse`
-   - agent-browser: `npm install -g @vercel/agent-browser`
+   - agent-browser: `npm install -g agent-browser`
 2. If agent-browser is unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
 3. Build the auto-install command from **only the missing tools**. Examples:
    - pa11y + axe missing → `npm install -g pa11y axe-cli`
-   - axe + agent-browser missing → `npm install -g axe-cli @vercel/agent-browser`
-   - all four missing → `npm install -g pa11y axe-cli lighthouse @vercel/agent-browser`
+   - axe + agent-browser missing → `npm install -g axe-cli agent-browser`
+   - all four missing → `npm install -g pa11y axe-cli lighthouse agent-browser`
 4. Use `AskUserQuestion` with the message (in `LANG`):
 
    **English:** "Some accessibility tools are missing. How would you like to proceed?"
@@ -337,7 +337,7 @@ Jurisdiction: [jurisdiction]
 
 [If BROWSER_STATUS is browser-unavailable, add:]
 Note: DOM-level checks were not performed (agent-browser unavailable). Install agent-browser
-(`npm i -g @vercel/agent-browser` or see https://agent-browser.dev) for more thorough analysis.
+(`npm install -g agent-browser` or see https://agent-browser.dev) for more thorough analysis.
 
 [If SCANNER_STATUS is no-scanners, add:]
 Note: No CLI scanners were available. Install pa11y, axe-cli, and lighthouse for scanner coverage.
@@ -353,7 +353,7 @@ Juridiction : [jurisdiction]
 
 [If BROWSER_STATUS is browser-unavailable, add:]
 Note : Les vérifications DOM n'ont pas pu être effectuées (agent-browser non disponible). Installez
-agent-browser (`npm i -g @vercel/agent-browser` ou voir https://agent-browser.dev) pour une analyse
+agent-browser (`npm install -g agent-browser` ou voir https://agent-browser.dev) pour une analyse
 DOM complète.
 
 [If SCANNER_STATUS is no-scanners, add:]
@@ -407,7 +407,7 @@ If both `BROWSER_STATUS` is `browser-unavailable` AND `SCANNER_STATUS` is `no-sc
 ```
 WARNING: Full degraded mode — neither agent-browser nor any CLI scanner was available.
 This audit could not perform any automated checks. To run a full audit:
-1. Install agent-browser: npm i -g @vercel/agent-browser (see https://agent-browser.dev)
+1. Install agent-browser: npm install -g agent-browser (see https://agent-browser.dev)
 2. Install accessibility scanners: npm install -g pa11y axe-cli lighthouse
 ```
 
@@ -415,6 +415,6 @@ This audit could not perform any automated checks. To run a full audit:
 ```
 AVERTISSEMENT : Mode dégradé total — ni agent-browser ni aucun scanner CLI n'était disponible.
 Cet audit n'a pu effectuer aucune vérification automatisée. Pour un audit complet :
-1. Installez agent-browser : npm i -g @vercel/agent-browser (voir https://agent-browser.dev)
+1. Installez agent-browser : npm install -g agent-browser (voir https://agent-browser.dev)
 2. Installez les scanners d'accessibilité : npm install -g pa11y axe-cli lighthouse
 ```

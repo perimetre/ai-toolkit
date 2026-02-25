@@ -155,7 +155,7 @@ You will receive:
 > DOM-level checks (alt text, heading structure, focus indicators, landmark elements, etc.) could not
 > be performed because agent-browser is not installed in this environment.
 > Results below are based on CLI scanner output only. Install agent-browser
-> (`npm i -g @vercel/agent-browser` or see https://agent-browser.dev) for full DOM analysis coverage.
+> (`npm install -g agent-browser` or see https://agent-browser.dev) for full DOM analysis coverage.
 ```
 
 **agent-browser unavailable — French:**
@@ -165,7 +165,7 @@ You will receive:
 > éléments de repère, etc.) n'ont pas pu être effectuées car agent-browser n'est pas installé dans
 > cet environnement.
 > Les résultats ci-dessous sont basés uniquement sur la sortie des scanners CLI. Installez
-> agent-browser (`npm i -g @vercel/agent-browser` ou voir https://agent-browser.dev) pour une
+> agent-browser (`npm install -g agent-browser` ou voir https://agent-browser.dev) pour une
 > couverture d'analyse DOM complète.
 ```
 
