@@ -202,7 +202,8 @@ If **any** tool is missing (pa11y, axe, Lighthouse, or agent-browser):
    - **EN:** "Cancel" / **FR:** "Annuler"
 
    **If user chooses auto-install:**
-   Run the `[INSTALL_CMD]` command built in step 3. Re-run the version checks. Print updated status table. Then proceed.
+   Run the `[INSTALL_CMD]` command built in step 3. Re-run the version checks. Print updated status table.
+   If any tools are **still missing** after the install attempt, restart step 1d for those remaining tools — do not silently proceed. The user must explicitly choose how to handle each unresolved tool.
 
    **If user chooses manual install:**
    Show the exact install commands for each missing tool. Then ask again (in `LANG`):
