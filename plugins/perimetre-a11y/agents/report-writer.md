@@ -150,6 +150,8 @@ You will receive:
 ### Degradation Warnings
 
 **agent-browser unavailable — English:**
+
+Output this block EXACTLY as written — do not alter the install command or package name:
 ```
 > **DEGRADED MODE — agent-browser Unavailable**
 > DOM-level checks (alt text, heading structure, focus indicators, landmark elements, etc.) could not
@@ -159,6 +161,8 @@ You will receive:
 ```
 
 **agent-browser unavailable — French:**
+
+Output this block EXACTLY as written — do not alter the install command or package name:
 ```
 > **MODE DÉGRADÉ — agent-browser non disponible**
 > Les vérifications au niveau du DOM (texte alternatif, structure des titres, indicateurs de focus,

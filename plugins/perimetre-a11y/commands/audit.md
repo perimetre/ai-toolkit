@@ -143,7 +143,7 @@ Parse each result:
 ### 1b. Check agent-browser
 
 ```bash
-agent-browser open about:blank 2>/dev/null && agent-browser close && echo "AGENT_BROWSER_FOUND" || echo "AGENT_BROWSER_MISSING"
+command -v agent-browser >/dev/null 2>&1 && echo "AGENT_BROWSER_FOUND" || echo "AGENT_BROWSER_MISSING"
 ```
 
 If the output is `AGENT_BROWSER_FOUND`, mark agent-browser as available. If `AGENT_BROWSER_MISSING`, mark agent-browser as unavailable.
