@@ -21,31 +21,20 @@ Run a full automated accessibility audit on a web property.
 
 ## Step 0: Parse and Validate Arguments
 
-There are two modes depending on whether arguments were provided:
+### Mode A — URL provided in arguments
 
-### Mode A — Arguments provided
+If a positional URL was passed (e.g. `/perimetre-a11y:audit https://example.com`), extract it and all flags. Use these defaults for any omitted flag: jurisdiction = `global`, depth = `2`, lang = `en`. Do not ask any questions — proceed directly to Step 1.
 
-If a positional URL argument was passed (e.g. `/perimetre-a11y:audit https://example.com`), parse all flags directly:
+1. **URL** — first non-flag argument. Must start with `http://` or `https://`. If invalid, stop and report the error.
+2. **`--jurisdiction`** — valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`.
+3. **`--depth N`** — integer, clamped 1–20. Default: `2`.
+4. **`--lang`** — valid values: `en`, `fr`. Default: `en`.
 
-1. **Extract URL** — the first non-flag argument. Must start with `http://` or `https://`. If invalid, stop and report the error.
-2. **Extract jurisdiction** — look for `--jurisdiction <value>`. Valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`. If an invalid value is provided, default to `global` and warn.
-3. **Extract depth** — look for `--depth <N>`. Parse as integer. Clamp to 1–20. Default: `2`.
-4. **Extract language** — look for `--lang <value>`. Valid values: `en`, `fr`. Default: `en`. If an invalid value is provided, default to `en` and warn.
+### Mode B — No URL in arguments
 
-### Mode B — No URL provided
+If **no positional URL was provided** (command invoked with no arguments, or with flags only), ask all four questions in sequence before doing anything else. Do not infer, prefill, or suggest any values — present each question as a blank slate.
 
-If the command was invoked **without a URL** (no arguments at all, or only flags without a positional URL), collect all four values interactively. Ask all four questions in sequence — do not proceed until all answers are collected.
-
-**Question 1 — URL:**
-```
-AskUserQuestion(
-  question: "What URL would you like to audit?",
-  placeholder: "https://example.com"
-)
-```
-Validate: must start with `http://` or `https://`. If invalid, ask again: "Please enter a full URL starting with https://".
-
-**Question 2 — Report language:**
+**Question 1 — Report language:**
 ```
 AskUserQuestion(
   question: "In which language should the report be written?",
@@ -57,7 +46,7 @@ AskUserQuestion(
 ```
 Map `"English"` → `en`, `"Français"` → `fr`.
 
-**Question 3 — Jurisdiction:**
+**Question 2 — Jurisdiction:**
 ```
 AskUserQuestion(
   question: "Which legal jurisdiction applies to this site?",
@@ -71,7 +60,7 @@ AskUserQuestion(
 ```
 Map: `"Global…"` → `global`, `"Federal…"` → `federal`, `"Ontario…"` → `ontario`, `"Quebec…"` → `quebec`.
 
-**Question 4 — Crawl depth:**
+**Question 3 — Crawl depth:**
 ```
 AskUserQuestion(
   question: "How many pages deep should the crawler go?",
@@ -84,7 +73,15 @@ AskUserQuestion(
   ]
 )
 ```
-Extract the leading number from the selected option (e.g. `"2 — …"` → `2`). If none selected or parsing fails, use `2`.
+Extract the leading number from the selected option. If parsing fails, use `2`.
+
+**Question 4 — URL:**
+```
+AskUserQuestion(
+  question: "What is the URL to audit?"
+)
+```
+Do not suggest, prefill, or infer a URL from context. Show only an empty text field. Validate: must start with `http://` or `https://`. If invalid, ask again: "Please enter a full URL starting with https://".
 
 ---
 
