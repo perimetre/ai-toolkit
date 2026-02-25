@@ -178,6 +178,8 @@ Vérification préliminaire
 
 ### 1d. Handle missing tools
 
+**Gate rule: the audit may only proceed past this step if (a) all tools are available, or (b) the user has explicitly selected "Continue without these tools". Any other outcome must loop back to this step or stop.**
+
 If **any** tool is missing (pa11y, axe, Lighthouse, or agent-browser):
 
 1. List **every** missing tool with its install command:
@@ -202,22 +204,23 @@ If **any** tool is missing (pa11y, axe, Lighthouse, or agent-browser):
    - **EN:** "Cancel" / **FR:** "Annuler"
 
    **If user chooses auto-install:**
-   Run the `[INSTALL_CMD]` command built in step 3. Re-run the version checks. Print updated status table.
-   If any tools are **still missing** after the install attempt, restart step 1d for those remaining tools — do not silently proceed. The user must explicitly choose how to handle each unresolved tool.
+   Run the `[INSTALL_CMD]` command built in step 3. Re-run checks 1a and 1b. Print updated status table.
+   If any tools are **still missing**, restart step 1d for those remaining tools — do not proceed.
 
    **If user chooses manual install:**
-   Show the exact install commands for each missing tool. Then ask again (in `LANG`):
-   - **EN:** "Ready to continue?" / **FR:** "Prêt à continuer ?"
-   - Options — **EN:** "Yes, continue" / "Cancel" · **FR:** "Oui, continuer" / "Annuler"
-   If user confirms, proceed. If user cancels, stop entirely.
+   Show the exact install commands for each missing tool. Then ask (in `LANG`):
+   - **EN:** "I've installed them — re-check" / **FR:** "Je les ai installés — re-vérifier"
+   - **EN:** "Cancel" / **FR:** "Annuler"
+   If user confirms: re-run checks 1a and 1b. Print updated status table.
+   If any tools are **still missing**, restart step 1d for those remaining tools — do not proceed.
+   If user cancels: stop entirely.
 
-   **If user chooses continue:**
-   Prepend a degraded coverage warning to the pipeline output and proceed. Store `PREFLIGHT_DEGRADED: true`.
+   **If user chooses "Continue without these tools":**
+   This is explicit user consent to proceed with degraded coverage. Store `PREFLIGHT_DEGRADED: true` and proceed.
+   Exception: if **all four** tools are unavailable, do not offer this option and do not proceed — no meaningful audit is possible without at least one data source.
 
    **If user cancels:**
    Stop entirely — do not proceed.
-
-If **all three** CLI tools are unavailable AND agent-browser is also unavailable AND user chose continue: **stop** — no meaningful audit is possible without at least one data source.
 
 ### 1e. Proceed
 
