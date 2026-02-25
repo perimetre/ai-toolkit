@@ -1,7 +1,7 @@
 ---
 description: "Automated accessibility audit: crawls a web property with Playwright, runs pa11y/axe/Lighthouse, maps findings to WCAG 2.2 and Canadian law, and produces a prioritized HIGH/MEDIUM/LOW report."
 argument-hint: "<url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]"
-allowed-tools: [Bash, Task, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_close, mcp__playwright__browser_install, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_close, mcp__plugin_playwright_playwright__browser_install]
+allowed-tools: [Bash, Task, AskUserQuestion, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_close, mcp__playwright__browser_install, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_close, mcp__plugin_playwright_playwright__browser_install]
 ---
 
 # Périmètre Accessibility Audit
@@ -21,30 +21,68 @@ Run a full automated accessibility audit on a web property.
 
 ## Step 0: Parse and Validate Arguments
 
-Parse the arguments provided to this command:
+There are two modes depending on whether arguments were provided:
 
-1. **Extract URL** — the first non-flag argument. Required. If missing, output:
-   ```
-   Error: URL is required.
-   Usage: /perimetre-a11y:audit <url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]
-   ```
-   and stop.
+### Mode A — Arguments provided
 
-2. **Validate URL** — must start with `http://` or `https://`. If not, output:
-   ```
-   Error: URL must start with http:// or https://
-   ```
-   and stop.
+If any argument was passed to the command, parse them directly:
 
-3. **Extract jurisdiction** — look for `--jurisdiction <value>` flag. Valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`. If an invalid value is provided, default to `global` and warn.
+1. **Extract URL** — the first non-flag argument. If missing or invalid (must start with `http://` or `https://`), use `AskUserQuestion` to ask for it (see URL question format below). Retry until valid.
+2. **Extract jurisdiction** — look for `--jurisdiction <value>`. Valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`. If an invalid value is provided, default to `global` and warn.
+3. **Extract depth** — look for `--depth <N>`. Parse as integer. Clamp to 1–20. Default: `8`.
+4. **Extract language** — look for `--lang <value>`. Valid values: `en`, `fr`. Default: `en`. If an invalid value is provided, default to `en` and warn.
 
-4. **Extract depth** — look for `--depth <N>` flag. Parse as integer. Clamp to range 1–20. Default: `8`.
+### Mode B — No arguments provided
 
-5. **Extract language** — look for `--lang <value>` flag. Valid values: `en`, `fr`. Default: `en`. If an invalid value is provided, default to `en` and warn.
+If the command was invoked with **no arguments at all**, use `AskUserQuestion` to collect each value interactively in sequence. Do not proceed to Step 1 until all four answers are collected.
 
-6. **Derive audit date** — use today's date in ISO format (YYYY-MM-DD).
+**Question 1 — URL:**
+```
+AskUserQuestion(
+  question: "Which URL would you like to audit?",
+  placeholder: "https://example.com"
+)
+```
+Validate the answer: must start with `http://` or `https://`. If invalid, ask again with the message: "That doesn't look like a valid URL. Please enter a full URL starting with http:// or https://".
 
-Echo the parsed configuration to the user before proceeding:
+**Question 2 — Jurisdiction:**
+```
+AskUserQuestion(
+  question: "Which legal jurisdiction applies to this site?",
+  options: [
+    "global — WCAG 2.2 only, no law citations",
+    "federal — ACA 2019 + CAN/ASC-EN 301 549:2024 → WCAG 2.1 AA",
+    "ontario — AODA 2005 + IASR → WCAG 2.0 AA",
+    "quebec — SGQRI 008-02 (gov't) / Charte c.C-12 (private)"
+  ]
+)
+```
+Map the selected option to the value: `global`, `federal`, `ontario`, or `quebec`.
+
+**Question 3 — Crawl depth:**
+```
+AskUserQuestion(
+  question: "How many levels deep should the crawler go? (1–20, default: 8)",
+  placeholder: "8"
+)
+```
+Parse as integer. If empty or non-numeric, use `8`. Clamp to 1–20.
+
+**Question 4 — Report language:**
+```
+AskUserQuestion(
+  question: "In which language should the report be written?",
+  options: [
+    "English",
+    "Français"
+  ]
+)
+```
+Map `"English"` → `en`, `"Français"` → `fr`.
+
+---
+
+After collecting all values (from either mode), derive the audit date (today's date in ISO format YYYY-MM-DD), then echo the confirmed configuration:
 
 ```
 Accessibility Audit
