@@ -23,7 +23,7 @@ You will receive:
 Before attempting any browser operations, verify that agent-browser is available:
 
 ```bash
-agent-browser open about:blank 2>/dev/null && agent-browser close && echo "FOUND" || echo "MISSING"
+command -v agent-browser >/dev/null 2>&1 && echo "FOUND" || echo "MISSING"
 ```
 
 If the check returns `MISSING`:
