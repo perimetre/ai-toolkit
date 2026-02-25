@@ -29,7 +29,7 @@ skills: []
 
 ### Federal — Accessible Canada Act (ACA)
 
-- **Citation format:** ACA, S.C. 2019, c. 10, s. [section]; CAN/ASC-EN 301 549:2024, clause [x.x.x]
+- **Citation format:** ACA, S.C. 2019, c. 10 + CAN/ASC-EN 301 549:2024 → WCAG 2.1 AA, SC [x.x.x] [Level]
 - **WCAG requirement:** WCAG 2.1 Level AA (via CAN/ASC-EN 301 549:2024 which references WCAG 2.1)
 - **Who must comply:** All federally regulated entities — banks, insurance, telecoms, broadcasters, airlines, federal crown corporations, Parliament, and the federal public service
 - **Deadline:** Organizations must publish accessibility plans and update them every 3 years; barriers must be progressively eliminated

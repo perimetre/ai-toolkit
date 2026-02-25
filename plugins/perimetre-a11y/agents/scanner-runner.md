@@ -1,6 +1,10 @@
 ---
 name: scanner-runner
-description: Runs pa11y, axe-core, and Lighthouse accessibility scanners against a page inventory (best-effort, capped at 20 URLs). Each scanner failure is logged and non-fatal. Returns no-scanners status if all three are unavailable.
+description: >
+  Runs pa11y, axe-core, and Lighthouse accessibility scanners against a page inventory
+  (best-effort, capped at 20 URLs). Each scanner failure is logged and non-fatal. Returns
+  no-scanners status if all three are unavailable.
+  <example>Run accessibility scanners against the page inventory for https://example.com. JURISDICTION: federal</example>
 model: sonnet
 tools: [Bash]
 skills: [wcag-standards]

@@ -1,6 +1,6 @@
 # perimetre-a11y
 
-**Version:** 1.2.0 — Last updated: 2026-02-25
+**Version:** 1.3.0 — Last updated: 2026-02-25
 
 Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores each issue 0–100, and produces a lean prioritized report. Gracefully degrades when Playwright or scanners are unavailable.
 
@@ -101,7 +101,7 @@ Each issue receives a final score 0–100:
 | Jurisdiction | Law | WCAG Version |
 |---|---|---|
 | `global` | WCAG 2.2 only | 2.2 AA |
-| `federal` | ACA S.C. 2019 c.10 + CAN/ASC-EN 301 549:2024 | 2.1 AA |
+| `federal` | ACA, S.C. 2019, c. 10 + CAN/ASC-EN 301 549:2024 | 2.1 AA |
 | `ontario` | AODA 2005 + IASR O.Reg.191/11 s.14 | 2.0 AA |
 | `quebec` | SGQRI 008-02 v2.1 (gov't) / Charte c.C-12 s.10 (private) | 2.0 AA (gov't) |
 

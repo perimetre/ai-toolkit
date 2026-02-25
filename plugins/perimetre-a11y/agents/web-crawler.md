@@ -1,6 +1,10 @@
 ---
 name: web-crawler
-description: Crawls a web property with Playwright BFS up to a depth limit, runs 13 DOM accessibility checks per page, and extracts same-origin links. Gracefully degrades to playwright-unavailable status if MCP tools are not accessible.
+description: >
+  Crawls a web property with Playwright BFS up to a depth limit, runs 13 DOM accessibility checks
+  per page, and extracts same-origin links. Gracefully degrades to playwright-unavailable status
+  if MCP tools are not accessible.
+  <example>Crawl https://example.com to depth 8 for DOM accessibility issues. JURISDICTION: ontario</example>
 model: sonnet
 tools: [mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_close, mcp__playwright__browser_install, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_close, mcp__plugin_playwright_playwright__browser_install]
 skills: [wcag-standards]

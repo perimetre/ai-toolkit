@@ -1,6 +1,6 @@
 {
   "name": "perimetre-a11y",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe/Lighthouse scanners, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores issues 0–100, and produces a lean prioritized report. Gracefully degrades when Playwright or scanners are unavailable.",
   "author": {
     "name": "Périmètre"

@@ -1,6 +1,11 @@
 ---
 name: report-writer
-description: Receives scored and mapped accessibility issues plus audit metadata, and produces a structured Markdown accessibility report with HIGH/MEDIUM/LOW findings, a compliance lens table, and manual verification gaps. Supports English and French output. Prepends degraded-mode warnings when Playwright or scanners were unavailable.
+description: >
+  Receives scored and mapped accessibility issues plus audit metadata, and produces a structured
+  Markdown accessibility report with HIGH/MEDIUM/LOW findings, a compliance lens table, and manual
+  verification gaps. Supports English and French output. Prepends degraded-mode warnings when
+  Playwright or scanners were unavailable.
+  <example>Write a full accessibility audit report for https://example.com. JURISDICTION: ontario. LANG: fr. 12 mapped issues.</example>
 model: sonnet
 tools: []
 skills: [wcag-standards, canadian-accessibility-law]

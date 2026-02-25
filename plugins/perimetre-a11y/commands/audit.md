@@ -1,7 +1,7 @@
 ---
 description: "Automated accessibility audit: crawls a web property with Playwright, runs pa11y/axe/Lighthouse, maps findings to WCAG 2.2 and Canadian law, and produces a prioritized HIGH/MEDIUM/LOW report."
 argument-hint: "<url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]"
-allowed-tools: [Bash, Task, AskUserQuestion, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_close, mcp__playwright__browser_install, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_close, mcp__plugin_playwright_playwright__browser_install]
+allowed-tools: [Bash, Task, AskUserQuestion]
 ---
 
 # Périmètre Accessibility Audit
@@ -193,6 +193,8 @@ Inform the user: `Step 3 complete — [TOTAL_ISSUES] issues mapped (HIGH: [HIGH_
 ## Short-Circuit: No Issues Found
 
 If `TOTAL_ISSUES` is 0, output the no-findings message in the chosen language and stop. Do not launch the report-writer agent.
+
+For the page count: use `PAGES_CRAWLED` from the crawler output if available; if `PLAYWRIGHT_STATUS` is `playwright-unavailable`, use `1` (the seed URL).
 
 **English (`LANG: en`):**
 ```

@@ -1,6 +1,10 @@
 ---
 name: standards-mapper
-description: Normalizes DOM findings and scanner findings into a unified schema, maps each issue to WCAG 2.2 success criteria, deduplicates cross-scanner same-element issues, applies the scoring formula, and adds Canadian jurisdiction law citations.
+description: >
+  Normalizes DOM findings and scanner findings into a unified schema, maps each issue to WCAG 2.2
+  success criteria, deduplicates cross-scanner same-element issues, applies the scoring formula,
+  and adds Canadian jurisdiction law citations.
+  <example>Normalize and score DOM findings and scanner findings for a 5-page audit. JURISDICTION: ontario</example>
 model: sonnet
 tools: []
 skills: [wcag-standards, canadian-accessibility-law]
@@ -81,7 +85,7 @@ For each deduplicated issue, calculate `final_score`:
 
 For each issue, add `law_citation` based on `JURISDICTION`:
 - `global`: `"WCAG 2.2, SC [x.x.x] [Level A/AA]"`
-- `federal`: `"ACA S.C. 2019 c.10 + CAN/ASC-EN 301 549:2024 → WCAG 2.1 AA, SC [x.x.x] [Level]"` (if SC is in WCAG 2.1; else `"best-practice under federal scope"`)
+- `federal`: `"ACA, S.C. 2019, c. 10 + CAN/ASC-EN 301 549:2024 → WCAG 2.1 AA, SC [x.x.x] [Level]"` (if SC is in WCAG 2.1; else `"best-practice under federal scope"`)
 - `ontario`: `"AODA 2005 + IASR O.Reg.191/11 s.14 → WCAG 2.0 AA, SC [x.x.x] [Level]"` (if SC is in WCAG 2.0; else `"best-practice — not mandated under AODA"`)
 - `quebec`: Government scope: `"SGQRI 008-02 v2.1 → WCAG 2.0 AA, critère [x.x.x]"` (if SC in WCAG 2.0) + note; Private scope: `"Charte c.C-12 s.10 (disability non-discrimination) — WCAG 2.0 AA recommended"`
 
