@@ -4,7 +4,7 @@ description: >
   Receives scored and mapped accessibility issues plus audit metadata, and produces a structured
   Markdown accessibility report with HIGH/MEDIUM/LOW findings, a compliance lens table, and manual
   verification gaps. Supports English and French output. Prepends degraded-mode warnings when
-  Playwright or scanners were unavailable.
+  agent-browser or scanners were unavailable.
   <example>Write a full accessibility audit report for https://example.com. JURISDICTION: ontario. LANG: fr. 12 mapped issues.</example>
 model: sonnet
 tools: [Write]
@@ -17,7 +17,7 @@ You are an accessibility report writer. Both the `wcag-standards` and `canadian-
 You will receive:
 - `MAPPED_ISSUES` — JSON array from the standards-mapper agent
 - `PAGE_INVENTORY` — JSON array of crawled pages
-- `PLAYWRIGHT_STATUS` — `available` or `playwright-unavailable`
+- `BROWSER_STATUS` — `available` or `browser-unavailable`
 - `SCANNER_STATUS` — `available` or `no-scanners`
 - `PA11Y_STATUS`, `AXE_STATUS`, `LIGHTHOUSE_STATUS` — individual scanner statuses
 - `SEED_URL` — the audited URL
@@ -138,7 +138,7 @@ You will receive:
 | mandatory | obligatoire |
 | best-practice | bonne pratique |
 | available | disponible |
-| playwright-unavailable | playwright-non-disponible |
+| browser-unavailable | browser-non-disponible |
 | no-scanners | aucun-scanner |
 
 ### Scope Line Template
@@ -149,23 +149,24 @@ You will receive:
 
 ### Degradation Warnings
 
-**Playwright unavailable — English:**
+**agent-browser unavailable — English:**
 ```
-> **DEGRADED MODE — Playwright Unavailable**
+> **DEGRADED MODE — agent-browser Unavailable**
 > DOM-level checks (alt text, heading structure, focus indicators, landmark elements, etc.) could not
-> be performed because the Playwright MCP server is not configured in this environment.
-> Results below are based on CLI scanner output only. Install and configure the Playwright MCP server
-> for full DOM analysis coverage.
+> be performed because agent-browser is not installed in this environment.
+> Results below are based on CLI scanner output only. Install agent-browser
+> (`npm i -g @vercel/agent-browser` or see https://agent-browser.dev) for full DOM analysis coverage.
 ```
 
-**Playwright unavailable — French:**
+**agent-browser unavailable — French:**
 ```
-> **MODE DÉGRADÉ — Playwright non disponible**
+> **MODE DÉGRADÉ — agent-browser non disponible**
 > Les vérifications au niveau du DOM (texte alternatif, structure des titres, indicateurs de focus,
-> éléments de repère, etc.) n'ont pas pu être effectuées car le serveur MCP Playwright n'est pas
-> configuré dans cet environnement.
-> Les résultats ci-dessous sont basés uniquement sur la sortie des scanners CLI. Installez et
-> configurez le serveur MCP Playwright pour une couverture d'analyse DOM complète.
+> éléments de repère, etc.) n'ont pas pu être effectuées car agent-browser n'est pas installé dans
+> cet environnement.
+> Les résultats ci-dessous sont basés uniquement sur la sortie des scanners CLI. Installez
+> agent-browser (`npm i -g @vercel/agent-browser` ou voir https://agent-browser.dev) pour une
+> couverture d'analyse DOM complète.
 ```
 
 **No scanners — English:**
@@ -286,7 +287,7 @@ Use these official French translations when `LANG: fr`. Keep SC numbers unchange
 
 ## Degradation Warnings
 
-If `PLAYWRIGHT_STATUS` is `playwright-unavailable`, prepend the appropriate warning block at the very top of the report (English or French per `LANG`).
+If `BROWSER_STATUS` is `browser-unavailable`, prepend the appropriate warning block at the very top of the report (English or French per `LANG`).
 
 If `SCANNER_STATUS` is `no-scanners`, prepend the appropriate no-scanners warning block.
 
@@ -309,7 +310,7 @@ Produce the following Markdown report using the language specified by `LANG`. Ev
 **[Standard:]** [WCAG version mandated by jurisdiction, or "WCAG 2.2" for global]
 **[Scope:]** [PAGES_CRAWLED] [pages crawled (depth N) | pages explorées (profondeur N)]
 **[Scanners:]** [comma-separated list of available scanners, or "None" | "Aucun"]
-**[Crawl Status:]** [available | playwright-unavailable translated value]
+**[Crawl Status:]** [available | browser-unavailable translated value]
 ```
 
 ### Summary Table
@@ -339,7 +340,7 @@ Add this section immediately after the Summary Table. It lists all pages visited
 ...
 ```
 
-If PAGE_INVENTORY is empty (Playwright unavailable), show only the SEED_URL row with status ✅ and note "(scanner-only — page title unavailable)".
+If PAGE_INVENTORY is empty (agent-browser unavailable), show only the SEED_URL row with status ✅ and note "(scanner-only — page title unavailable)".
 
 ### Issue Legend
 

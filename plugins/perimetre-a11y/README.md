@@ -1,8 +1,8 @@
 # perimetre-a11y
 
-**Version:** 1.4.5 — Last updated: 2026-02-25
+**Version:** 1.4.7 — Last updated: 2026-02-25
 
-Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores each issue 0–100, and produces a lean prioritized report. Gracefully degrades when Playwright or scanners are unavailable.
+Automated accessibility auditing for web properties. Crawls with agent-browser, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores each issue 0–100, and produces a lean prioritized report. Gracefully degrades when agent-browser or scanners are unavailable.
 
 ---
 
@@ -69,9 +69,9 @@ The audit runs a 5-stage sequential pipeline:
 | Stage | What it does |
 |-------|-------------|
 | 0 | Argument parsing + interactive collection |
-| 1 | **Pre-flight check** — verifies pa11y, axe, Lighthouse, and Playwright availability before any agents run; offers auto-install if tools are missing |
-| 2 | `web-crawler` — BFS crawl up to 50 pages; runs 13 DOM checks per page via Playwright |
-| 3 | `scanner-runner` — runs pa11y, axe-core, and Lighthouse against up to 20 pages; falls back to sitemap discovery when Playwright is unavailable |
+| 1 | **Pre-flight check** — verifies pa11y, axe, Lighthouse, and agent-browser availability before any agents run; offers auto-install if tools are missing |
+| 2 | `web-crawler` — BFS crawl up to 50 pages; runs 13 DOM checks per page via agent-browser |
+| 3 | `scanner-runner` — runs pa11y, axe-core, and Lighthouse against up to 20 pages; falls back to sitemap discovery when agent-browser is unavailable |
 | 4 | `standards-mapper` — normalizes findings, maps to WCAG SCs, deduplicates, scores 0–100, adds law citations |
 | 5 | `report-writer` — produces structured Markdown report and saves it to `./a11y-[hostname]-[date].md` |
 
@@ -135,9 +135,9 @@ The audit continues producing value even when tools are unavailable:
 | Situation | Behaviour |
 |-----------|-----------|
 | Missing CLI tools detected at start | Pre-flight check flags them immediately and offers to auto-install |
-| Playwright MCP not configured | Skips DOM checks; scanner-runner falls back to sitemap discovery for URL list |
-| Sitemap found when Playwright unavailable | Scans up to 20 URLs from sitemap; notes depth parameter had no effect |
-| No sitemap found when Playwright unavailable | Scans seed URL only; notes depth parameter had no effect |
+| agent-browser not installed | Skips DOM checks; scanner-runner falls back to sitemap discovery for URL list |
+| Sitemap found when agent-browser unavailable | Scans up to 20 URLs from sitemap; notes depth parameter had no effect |
+| No sitemap found when agent-browser unavailable | Scans seed URL only; notes depth parameter had no effect |
 | All scanners absent (`npx` not found) | Skips scanner stage; runs DOM-only audit with warning |
 | Both unavailable | Pre-flight stops execution (no meaningful audit possible) |
 | Individual scanner missing | Logs the scanner as unavailable; others continue |
@@ -154,7 +154,7 @@ The audit continues producing value even when tools are unavailable:
 
 ## Agents
 
-- `web-crawler` — Playwright BFS crawler with 13 DOM checks
+- `web-crawler` — agent-browser BFS crawler with 13 DOM checks
 - `scanner-runner` — pa11y / axe-core / Lighthouse runner
 - `standards-mapper` — Normalization, deduplication, scoring, law citations
 - `report-writer` — Structured Markdown report generator
@@ -169,4 +169,10 @@ For full coverage, install accessibility scanners globally:
 npm install -g pa11y axe-cli lighthouse
 ```
 
-And configure the Playwright MCP server in Claude Code (see the [Playwright MCP documentation](https://code.claude.com/docs)).
+And install agent-browser for DOM crawling:
+
+```bash
+npm i -g @vercel/agent-browser
+```
+
+See the [agent-browser documentation](https://github.com/vercel-labs/agent-browser) for more details.

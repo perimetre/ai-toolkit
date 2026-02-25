@@ -17,7 +17,7 @@ You will receive:
 - `DOM_FINDINGS` — JSON array from the web-crawler agent
 - `SCANNER_FINDINGS` — JSON array from the scanner-runner agent
 - `PAGE_INVENTORY` — JSON array of crawled pages
-- `PLAYWRIGHT_STATUS` — `available` or `playwright-unavailable`
+- `BROWSER_STATUS` — `available` or `browser-unavailable`
 - `SCANNER_STATUS` — `available` or `no-scanners`
 - `JURISDICTION` — `global`, `federal`, `ontario`, or `quebec`
 

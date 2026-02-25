@@ -1,7 +1,7 @@
 ---
-description: "Automated accessibility audit: crawls a web property with Playwright, runs pa11y/axe/Lighthouse, maps findings to WCAG 2.2 and Canadian law, and produces a prioritized HIGH/MEDIUM/LOW report."
+description: "Automated accessibility audit: crawls a web property with agent-browser, runs pa11y/axe/Lighthouse, maps findings to WCAG 2.2 and Canadian law, and produces a prioritized HIGH/MEDIUM/LOW report."
 argument-hint: "<url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]"
-allowed-tools: [Bash, Task, AskUserQuestion, mcp__playwright__browser_navigate, mcp__playwright__browser_close, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_close]
+allowed-tools: [Bash, Task, AskUserQuestion]
 ---
 
 # Périmètre Accessibility Audit
@@ -77,7 +77,7 @@ Extract the leading number from the selected option. If parsing fails, use `2`.
 
 **Question 4 — URL:**
 
-Use `AskUserQuestion` with this exact question text — do not modify it.
+CRITICAL: Call `AskUserQuestion` with ONLY the `question` parameter. You MUST NOT add an `options` array. You MUST NOT add a `placeholder`. No other parameters. This must render as a plain text field.
 
 ```
 AskUserQuestion(
@@ -85,7 +85,7 @@ AskUserQuestion(
 )
 ```
 
-After receiving the answer, validate silently (must start with `http://` or `https://`). If invalid, ask again the same way.
+After receiving the answer, validate silently. If the answer is not a valid web address, call the same question again.
 
 ---
 
@@ -123,9 +123,13 @@ Parse each result:
 - `*_FOUND` → record version string if captured, status = available
 - `*_MISSING` → status = not found
 
-### 1b. Check Playwright
+### 1b. Check agent-browser
 
-Attempt `browser_navigate` to `about:blank` using the Playwright MCP tool (either `mcp__playwright__browser_navigate` or `mcp__plugin_playwright_playwright__browser_navigate`). If the tool call succeeds, close the browser with `browser_close` and mark Playwright as available. If the tool is not found or throws an error, mark Playwright as unavailable.
+```bash
+agent-browser open about:blank 2>/dev/null && agent-browser close && echo "AGENT_BROWSER_FOUND" || echo "AGENT_BROWSER_MISSING"
+```
+
+If the output is `AGENT_BROWSER_FOUND`, mark agent-browser as available. If `AGENT_BROWSER_MISSING`, mark agent-browser as unavailable.
 
 ### 1c. Print status table
 
@@ -135,24 +139,24 @@ Print the following table in the chosen language (`LANG`):
 ```
 Pre-flight Check
 ================
-| Tool        | Status                        |
-|-------------|-------------------------------|
-| Playwright  | ✅ Available / ❌ Not found   |
-| pa11y       | ✅ v3.x / ❌ Not found        |
-| axe         | ✅ v4.x / ❌ Not found        |
-| Lighthouse  | ✅ v12.x / ❌ Not found       |
+| Tool          | Status                        |
+|---------------|-------------------------------|
+| agent-browser | ✅ Available / ❌ Not found   |
+| pa11y         | ✅ v3.x / ❌ Not found        |
+| axe           | ✅ v4.x / ❌ Not found        |
+| Lighthouse    | ✅ v12.x / ❌ Not found       |
 ```
 
 **French (`LANG: fr`):**
 ```
 Vérification préliminaire
 =========================
-| Outil       | Statut                        |
-|-------------|-------------------------------|
-| Playwright  | ✅ Disponible / ❌ Introuvable |
-| pa11y       | ✅ v3.x / ❌ Introuvable       |
-| axe         | ✅ v4.x / ❌ Introuvable       |
-| Lighthouse  | ✅ v12.x / ❌ Introuvable      |
+| Outil         | Statut                        |
+|---------------|-------------------------------|
+| agent-browser | ✅ Disponible / ❌ Introuvable |
+| pa11y         | ✅ v3.x / ❌ Introuvable       |
+| axe           | ✅ v4.x / ❌ Introuvable       |
+| Lighthouse    | ✅ v12.x / ❌ Introuvable      |
 ```
 
 ### 1d. Handle missing tools
@@ -160,7 +164,7 @@ Vérification préliminaire
 If **any** CLI tool is missing (pa11y, axe, Lighthouse):
 
 1. List each missing tool with its install command
-2. If Playwright is also unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
+2. If agent-browser is also unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
 3. Use `AskUserQuestion` with the message (in `LANG`):
 
    **English:** "Some accessibility tools are missing. How would you like to proceed?"
@@ -184,7 +188,7 @@ If **any** CLI tool is missing (pa11y, axe, Lighthouse):
    **If user cancels:**
    Stop entirely — do not proceed.
 
-If **all three** CLI tools are unavailable AND Playwright is also unavailable AND user chose continue: **stop** — no meaningful audit is possible without at least one data source.
+If **all three** CLI tools are unavailable AND agent-browser is also unavailable AND user chose continue: **stop** — no meaningful audit is possible without at least one data source.
 
 ### 1e. Proceed
 
@@ -213,13 +217,13 @@ Apply the 13 DOM checks from the wcag-standards skill to every page you successf
 Store the full agent output as `CRAWLER_OUTPUT`.
 
 Extract from `CRAWLER_OUTPUT`:
-- `PLAYWRIGHT_STATUS` (look for `PLAYWRIGHT_STATUS:` line)
+- `BROWSER_STATUS` (look for `BROWSER_STATUS:` line)
 - `PAGE_INVENTORY` JSON array (content between `PAGE INVENTORY` and `DOM FINDINGS` sections)
 - `DOM_FINDINGS` JSON array (content between `DOM FINDINGS` and `CRAWL NOTES` sections)
 - `PAGES_CRAWLED` count
 - `CRAWL_NOTES` text
 
-Inform the user: `Step 2 complete — [PAGES_CRAWLED] pages crawled (Playwright: [PLAYWRIGHT_STATUS])`
+Inform the user: `Step 2 complete — [PAGES_CRAWLED] pages crawled (agent-browser: [BROWSER_STATUS])`
 
 ---
 
@@ -236,7 +240,7 @@ PAGE_INVENTORY:
 
 SEED_URL: [url]
 JURISDICTION: [jurisdiction]
-PLAYWRIGHT_STATUS: [PLAYWRIGHT_STATUS]
+BROWSER_STATUS: [BROWSER_STATUS]
 
 Run pa11y, axe, and Lighthouse best-effort for up to 20 URLs.
 ```
@@ -270,7 +274,7 @@ SCANNER_FINDINGS:
 PAGE_INVENTORY:
 [PAGE_INVENTORY JSON]
 
-PLAYWRIGHT_STATUS: [PLAYWRIGHT_STATUS]
+BROWSER_STATUS: [BROWSER_STATUS]
 SCANNER_STATUS: [SCANNER_STATUS]
 JURISDICTION: [jurisdiction]
 
@@ -292,7 +296,7 @@ Inform the user: `Step 4 complete — [TOTAL_ISSUES] issues mapped (HIGH: [HIGH_
 
 If `TOTAL_ISSUES` is 0, output the no-findings message in the chosen language and stop. Do not launch the report-writer agent.
 
-For the page count: use `PAGES_CRAWLED` from the crawler output if available; if `PLAYWRIGHT_STATUS` is `playwright-unavailable`, use `1` (the seed URL).
+For the page count: use `PAGES_CRAWLED` from the crawler output if available; if `BROWSER_STATUS` is `browser-unavailable`, use `1` (the seed URL).
 
 **English (`LANG: en`):**
 ```
@@ -302,9 +306,9 @@ Scanners: [list available scanners]
 Crawl depth: [depth]
 Jurisdiction: [jurisdiction]
 
-[If PLAYWRIGHT_STATUS is playwright-unavailable, add:]
-Note: DOM-level checks were not performed (Playwright unavailable). Install the Playwright MCP
-server for more thorough analysis.
+[If BROWSER_STATUS is browser-unavailable, add:]
+Note: DOM-level checks were not performed (agent-browser unavailable). Install agent-browser
+(`npm i -g @vercel/agent-browser` or see https://agent-browser.dev) for more thorough analysis.
 
 [If SCANNER_STATUS is no-scanners, add:]
 Note: No CLI scanners were available. Install pa11y, axe-cli, and lighthouse for scanner coverage.
@@ -318,9 +322,10 @@ Scanners : [list available scanners]
 Profondeur d'exploration : [depth]
 Juridiction : [jurisdiction]
 
-[If PLAYWRIGHT_STATUS is playwright-unavailable, add:]
-Note : Les vérifications DOM n'ont pas pu être effectuées (Playwright non disponible). Installez le
-serveur MCP Playwright pour une analyse DOM complète.
+[If BROWSER_STATUS is browser-unavailable, add:]
+Note : Les vérifications DOM n'ont pas pu être effectuées (agent-browser non disponible). Installez
+agent-browser (`npm i -g @vercel/agent-browser` ou voir https://agent-browser.dev) pour une analyse
+DOM complète.
 
 [If SCANNER_STATUS is no-scanners, add:]
 Note : Aucun scanner CLI n'était disponible. Installez pa11y, axe-cli et lighthouse pour une
@@ -343,7 +348,7 @@ MAPPED_ISSUES:
 PAGE_INVENTORY:
 [PAGE_INVENTORY JSON]
 
-PLAYWRIGHT_STATUS: [PLAYWRIGHT_STATUS]
+BROWSER_STATUS: [BROWSER_STATUS]
 SCANNER_STATUS: [SCANNER_STATUS]
 PA11Y_STATUS: [PA11Y_STATUS]
 AXE_STATUS: [AXE_STATUS]
@@ -367,20 +372,20 @@ Display the report-writer agent's output directly to the user as the final resul
 
 ## Degraded-Mode Summary
 
-If both `PLAYWRIGHT_STATUS` is `playwright-unavailable` AND `SCANNER_STATUS` is `no-scanners`, prepend the following before the report in the chosen language:
+If both `BROWSER_STATUS` is `browser-unavailable` AND `SCANNER_STATUS` is `no-scanners`, prepend the following before the report in the chosen language:
 
 **English (`LANG: en`):**
 ```
-WARNING: Full degraded mode — neither Playwright nor any CLI scanner was available.
+WARNING: Full degraded mode — neither agent-browser nor any CLI scanner was available.
 This audit could not perform any automated checks. To run a full audit:
-1. Configure the Playwright MCP server (see https://code.claude.com/docs)
+1. Install agent-browser: npm i -g @vercel/agent-browser (see https://agent-browser.dev)
 2. Install accessibility scanners: npm install -g pa11y axe-cli lighthouse
 ```
 
 **French (`LANG: fr`):**
 ```
-AVERTISSEMENT : Mode dégradé total — ni Playwright ni aucun scanner CLI n'était disponible.
+AVERTISSEMENT : Mode dégradé total — ni agent-browser ni aucun scanner CLI n'était disponible.
 Cet audit n'a pu effectuer aucune vérification automatisée. Pour un audit complet :
-1. Configurez le serveur MCP Playwright (voir https://code.claude.com/docs)
+1. Installez agent-browser : npm i -g @vercel/agent-browser (voir https://agent-browser.dev)
 2. Installez les scanners d'accessibilité : npm install -g pa11y axe-cli lighthouse
 ```

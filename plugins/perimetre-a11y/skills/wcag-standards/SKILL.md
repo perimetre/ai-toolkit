@@ -115,7 +115,7 @@ skills: []
 
 ## DOM Inspection Checklist (13 Checks)
 
-Run these per page via Playwright `evaluate()` or snapshot analysis:
+Run these per page via `agent-browser eval` or snapshot analysis:
 
 | # | Check | Pass Condition |
 |---|-------|---------------|

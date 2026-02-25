@@ -1,12 +1,12 @@
 ---
 name: web-crawler
 description: >
-  Crawls a web property with Playwright BFS up to a depth limit, runs 13 DOM accessibility checks
-  per page, and extracts same-origin links. Gracefully degrades to playwright-unavailable status
-  if MCP tools are not accessible.
+  Crawls a web property with agent-browser BFS up to a depth limit, runs 13 DOM accessibility checks
+  per page, and extracts same-origin links. Gracefully degrades to browser-unavailable status
+  if agent-browser is not accessible.
   <example>Crawl https://example.com to depth 8 for DOM accessibility issues. JURISDICTION: ontario</example>
 model: sonnet
-tools: [mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_close, mcp__playwright__browser_install, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_close, mcp__plugin_playwright_playwright__browser_install]
+tools: [Bash]
 skills: [wcag-standards]
 color: blue
 ---
@@ -18,12 +18,16 @@ You will receive:
 - `DEPTH` — maximum BFS depth (1–20)
 - `JURISDICTION` — the jurisdiction context for the audit (`global`, `federal`, `ontario`, `quebec`)
 
-## Playwright Graceful Degradation
+## agent-browser Graceful Degradation
 
-Before attempting any browser operations, note that Playwright MCP tools may not be available. Try `mcp__playwright__*` namespace first; fall back to `mcp__plugin_playwright_playwright__*` if the first namespace fails.
+Before attempting any browser operations, verify that agent-browser is available:
 
-If ALL Playwright tool calls fail with errors indicating the MCP server is not configured or unavailable:
-- Set `PLAYWRIGHT_STATUS: playwright-unavailable`
+```bash
+agent-browser open about:blank 2>/dev/null && agent-browser close && echo "FOUND" || echo "MISSING"
+```
+
+If the check returns `MISSING`:
+- Set `BROWSER_STATUS: browser-unavailable`
 - Return the output structure below with empty `PAGE_INVENTORY` and `DOM_FINDINGS` arrays
 - Do NOT error out — the pipeline will continue with scanner-only mode
 
@@ -34,16 +38,15 @@ If ALL Playwright tool calls fail with errors indicating the MCP server is not c
    a. Skip if already visited or if depth > DEPTH
    b. Skip if not same-origin as seed URL
    c. Hard cap: stop if visited count reaches 50 pages
-   d. Navigate to URL
-   e. Wait for page load (networkidle or 3s timeout)
-   f. Run all 13 DOM checks (see below)
-   g. Extract same-origin `<a href>` links for next depth
-   h. Close/release page resources before next navigation
+   d. Navigate: `agent-browser open "[url]"` (daemon auto-starts and handles page load)
+   e. Run all 13 DOM checks (see below)
+   f. Extract same-origin `<a href>` links for next depth
+   g. Do NOT close between pages — re-use the same daemon session
 3. Record any navigation errors per URL (timeout, 404, etc.) without stopping the crawl
 
 ## 13 DOM Checks Per Page
 
-Run these via `browser_evaluate` on each page. For each check, record findings as an array of objects:
+Run these via `agent-browser eval` on each page. For multi-line scripts, write the JS to a temp file first and pipe it: `agent-browser eval --stdin < /tmp/check_N.js`. For single-line scripts, use inline: `agent-browser eval "[js]"`. For each check, record findings as an array of objects:
 
 ### Check 1 — Missing alt text
 ```javascript
@@ -208,17 +211,8 @@ Array.from(document.querySelectorAll('img[alt]')).filter(el => {
 ## Link Extraction
 
 After DOM checks, extract same-origin links:
-```javascript
-(function() {
-  const origin = window.location.origin;
-  return Array.from(document.querySelectorAll('a[href]'))
-    .map(a => a.href)
-    .filter(href => href.startsWith(origin))
-    .filter(href => !href.includes('#'))
-    .map(href => href.split('?')[0])
-    .filter((v, i, a) => a.indexOf(v) === i)
-    .slice(0, 100);
-})()
+```bash
+agent-browser eval "Array.from(document.links).map(a=>a.href).filter(h=>h.startsWith(window.location.origin)&&!h.includes('#')).map(h=>h.split('?')[0]).filter((v,i,a)=>a.indexOf(v)===i).slice(0,100)"
 ```
 
 ## Output Format
@@ -228,7 +222,7 @@ Return EXACTLY this structure:
 ```
 CRAWL SUMMARY
 =============
-PLAYWRIGHT_STATUS: available | playwright-unavailable
+BROWSER_STATUS: available | browser-unavailable
 SEED_URL: [url]
 DEPTH: [n]
 JURISDICTION: [jurisdiction]
@@ -262,4 +256,6 @@ CRAWL NOTES
 [Any warnings, skipped pages, navigation errors, or degradation notes]
 ```
 
-If `PLAYWRIGHT_STATUS` is `playwright-unavailable`, return empty arrays for PAGE_INVENTORY and DOM_FINDINGS and explain in CRAWL NOTES.
+After all pages are done, close the browser session: `agent-browser close`
+
+If `BROWSER_STATUS` is `browser-unavailable`, return empty arrays for PAGE_INVENTORY and DOM_FINDINGS and explain in CRAWL NOTES.
