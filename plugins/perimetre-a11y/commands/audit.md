@@ -23,7 +23,7 @@ Run a full automated accessibility audit on a web property.
 
 ### Mode A — URL provided in arguments
 
-If a positional URL was passed (e.g. `/perimetre-a11y:audit https://example.com`), extract it and all flags. Use these defaults for any omitted flag: jurisdiction = `global`, depth = `2`, lang = `en`. Do not ask any questions — proceed directly to Step 1.
+If a positional URL was passed (e.g. `/perimetre-a11y:audit https://your-site.com`), extract it and all flags. Use these defaults for any omitted flag: jurisdiction = `global`, depth = `2`, lang = `en`. Do not ask any questions — proceed directly to Step 1.
 
 1. **URL** — first non-flag argument. Must start with `http://` or `https://`. If invalid, stop and report the error.
 2. **`--jurisdiction`** — valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`.
@@ -77,11 +77,11 @@ Extract the leading number from the selected option. If parsing fails, use `2`.
 
 **Question 4 — URL:**
 
-CRITICAL: Call `AskUserQuestion` with ONLY the `question` parameter. You MUST NOT add an `options` array. You MUST NOT add a `placeholder`. No other parameters. This must render as a plain text field.
+The URL is the user's own specific website — it is impossible to know in advance. Options for a URL field make no sense. Execute this call EXACTLY as written, with no additions:
 
 ```
 AskUserQuestion(
-  question: "URL :"
+  question: "URL du site / Site URL :"
 )
 ```
 
