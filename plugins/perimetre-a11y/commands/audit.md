@@ -76,12 +76,17 @@ AskUserQuestion(
 Extract the leading number from the selected option. If parsing fails, use `2`.
 
 **Question 4 — URL:**
+
+Use `AskUserQuestion` with a `placeholder` only — **no `options` array**. This renders as a plain text field.
+
 ```
 AskUserQuestion(
-  question: "What is the URL to audit?"
+  question: "What is the URL to audit?",
+  placeholder: ""
 )
 ```
-Do not suggest, prefill, or infer a URL from context. Show only an empty text field. Validate: must start with `http://` or `https://`. If invalid, ask again: "Please enter a full URL starting with https://".
+
+After receiving the answer, validate silently. If invalid, ask again the same way.
 
 ---
 
