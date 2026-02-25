@@ -339,8 +339,7 @@ Crawl depth: [depth]
 Jurisdiction: [jurisdiction]
 
 [If BROWSER_STATUS is browser-unavailable, add:]
-Note: DOM-level checks were not performed (agent-browser unavailable). Install agent-browser
-(`npm install -g agent-browser` or see https://agent-browser.dev) for more thorough analysis.
+Note: DOM-level checks were not performed (agent-browser unavailable). See https://agent-browser.dev for installation instructions.
 
 [If SCANNER_STATUS is no-scanners, add:]
 Note: No CLI scanners were available. Install pa11y, axe-cli, and lighthouse for scanner coverage.
@@ -355,9 +354,7 @@ Profondeur d'exploration : [depth]
 Juridiction : [jurisdiction]
 
 [If BROWSER_STATUS is browser-unavailable, add:]
-Note : Les vérifications DOM n'ont pas pu être effectuées (agent-browser non disponible). Installez
-agent-browser (`npm install -g agent-browser` ou voir https://agent-browser.dev) pour une analyse
-DOM complète.
+Note : Les vérifications DOM n'ont pas pu être effectuées (agent-browser non disponible). Voir https://agent-browser.dev pour les instructions d'installation.
 
 [If SCANNER_STATUS is no-scanners, add:]
 Note : Aucun scanner CLI n'était disponible. Installez pa11y, axe-cli et lighthouse pour une
@@ -410,7 +407,7 @@ If both `BROWSER_STATUS` is `browser-unavailable` AND `SCANNER_STATUS` is `no-sc
 ```
 WARNING: Full degraded mode — neither agent-browser nor any CLI scanner was available.
 This audit could not perform any automated checks. To run a full audit:
-1. Install agent-browser: npm install -g agent-browser (see https://agent-browser.dev)
+1. Install agent-browser: see https://agent-browser.dev
 2. Install accessibility scanners: npm install -g pa11y axe-cli lighthouse
 ```
 
@@ -418,6 +415,6 @@ This audit could not perform any automated checks. To run a full audit:
 ```
 AVERTISSEMENT : Mode dégradé total — ni agent-browser ni aucun scanner CLI n'était disponible.
 Cet audit n'a pu effectuer aucune vérification automatisée. Pour un audit complet :
-1. Installez agent-browser : npm install -g agent-browser (voir https://agent-browser.dev)
+1. Installez agent-browser : voir https://agent-browser.dev
 2. Installez les scanners d'accessibilité : npm install -g pa11y axe-cli lighthouse
 ```

@@ -150,27 +150,20 @@ You will receive:
 ### Degradation Warnings
 
 **agent-browser unavailable — English:**
-
-Output this block EXACTLY as written — do not alter the install command or package name:
 ```
 > **DEGRADED MODE — agent-browser Unavailable**
 > DOM-level checks (alt text, heading structure, focus indicators, landmark elements, etc.) could not
 > be performed because agent-browser is not installed in this environment.
-> Results below are based on CLI scanner output only. Install agent-browser
-> (`npm install -g agent-browser` or see https://agent-browser.dev) for full DOM analysis coverage.
+> Results below are based on CLI scanner output only. See https://agent-browser.dev for installation instructions.
 ```
 
 **agent-browser unavailable — French:**
-
-Output this block EXACTLY as written — do not alter the install command or package name:
 ```
 > **MODE DÉGRADÉ — agent-browser non disponible**
 > Les vérifications au niveau du DOM (texte alternatif, structure des titres, indicateurs de focus,
 > éléments de repère, etc.) n'ont pas pu être effectuées car agent-browser n'est pas installé dans
 > cet environnement.
-> Les résultats ci-dessous sont basés uniquement sur la sortie des scanners CLI. Installez
-> agent-browser (`npm install -g agent-browser` ou voir https://agent-browser.dev) pour une
-> couverture d'analyse DOM complète.
+> Les résultats ci-dessous sont basés uniquement sur la sortie des scanners CLI. Voir https://agent-browser.dev pour les instructions d'installation.
 ```
 
 **No scanners — English:**
