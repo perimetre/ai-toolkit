@@ -7,7 +7,7 @@ description: >
   Playwright or scanners were unavailable.
   <example>Write a full accessibility audit report for https://example.com. JURISDICTION: ontario. LANG: fr. 12 mapped issues.</example>
 model: sonnet
-tools: []
+tools: [Write]
 skills: [wcag-standards, canadian-accessibility-law]
 color: green
 ---
@@ -38,14 +38,43 @@ You will receive:
 |---------|--------|
 | Accessibility Audit Report | Rapport d'audit d'accessibilité |
 | Summary | Sommaire |
+| Audited Pages | Pages auditées |
 | HIGH Priority Issues | Problèmes de priorité ÉLEVÉE |
 | MEDIUM Priority Issues | Problèmes de priorité MOYENNE |
 | LOW Priority Issues | Problèmes de priorité FAIBLE |
 | These issues have lower urgency. Address after HIGH and MEDIUM issues are resolved. | Ces problèmes sont moins urgents. Traitez-les après avoir résolu les problèmes ÉLEVÉS et MOYENS. |
-| Compliance Lens | Tableau de conformité |
 | Manual Verification Required | Vérification manuelle requise |
 | The following WCAG criteria cannot be reliably tested by automated tools and require human review: | Les critères WCAG suivants ne peuvent pas être testés de façon fiable par des outils automatisés et nécessitent une révision humaine : |
 | Audit Notes | Notes d'audit |
+
+### Compliance Table Titles (jurisdiction-aware)
+
+| Jurisdiction | English | French |
+|---|---|---|
+| global | Tested Criteria Overview — WCAG 2.2 | Vue d'ensemble des critères testés — WCAG 2.2 |
+| federal | Tested Criteria Overview — WCAG 2.1 AA (ACA / CAN/ASC-EN 301 549) | Vue d'ensemble des critères testés — WCAG 2.1 AA (ACA / CAN/ASC-EN 301 549) |
+| ontario | Tested Criteria Overview — WCAG 2.0 AA (AODA / IASR) | Vue d'ensemble des critères testés — WCAG 2.0 AA (AODA / IASR) |
+| quebec | Tested Criteria Overview — WCAG 2.0 AA (SGQRI 008-02 / Charte) | Vue d'ensemble des critères testés — WCAG 2.0 AA (SGQRI 008-02 / Charte) |
+
+### Compliance Table Intro Sentence
+
+| English | French |
+|---------|--------|
+| Each row corresponds to a WCAG success criterion tested automatically. All applicable legal standards reference these same criteria. Issues above are cross-referenced by ID. | Chaque ligne correspond à un critère WCAG testé automatiquement. Tous les standards légaux applicables référencent ces mêmes critères. Les enjeux listés plus haut sont croisés par identifiant. |
+
+### Priority Labels with Emoji
+
+| Score range | English | French |
+|-------------|---------|--------|
+| ≥ 85 | 🔴 CRITICAL | 🔴 CRITIQUE |
+| 60–84 | 🟠 HIGH | 🟠 ÉLEVÉ |
+| < 60 | 🟡 MEDIUM | 🟡 MOYEN |
+
+### Priority Legend Text
+
+| English | French |
+|---------|--------|
+| A-xxx = reference identifier (use when filing issues with developers). 🔴 CRITICAL = urgent fix required, 🟠 HIGH = priority fix, 🟡 MEDIUM = recommended improvement. | A-xxx = identifiant de référence (à citer avec vos développeurs). 🔴 CRITIQUE = correction urgente, 🟠 ÉLEVÉ = correction prioritaire, 🟡 MOYEN = amélioration recommandée. |
 
 ### Field Labels
 
@@ -58,14 +87,15 @@ You will receive:
 | Scope: | Portée : |
 | Scanners: | Scanners : |
 | Crawl Status: | État de l'exploration : |
-| Score: | Score : |
+| WCAG Criterion: | Critère WCAG : |
+| Issue: | Problème détecté : |
 | Element: | Élément : |
-| Pages affected: | Pages touchées : |
-| Source: | Source : |
+| Affected pages: | Pages affectées : |
+| Legal obligation: | Obligation légale : |
+| Suggested fix: | Correction suggérée : |
+| Detected by: | Détecté par : |
 | Legal: | Référence légale : |
 | Jurisdiction signal: | Signal juridictionnel : |
-| Issue: | Problème : |
-| Fix: | Correction : |
 
 ### Priority Bucket Labels
 
@@ -91,6 +121,11 @@ You will receive:
 | Status | Statut |
 | Signal | Signal |
 | Fix | Correction |
+| Issues | Enjeux |
+| Nb | Nb |
+| # | # |
+| URL | URL |
+| Page Title | Titre de page |
 
 ### Status / Signal Values
 
@@ -98,6 +133,8 @@ You will receive:
 |---------|--------|
 | FAIL | ÉCHEC |
 | PASS* | RÉUSSI* |
+| FAILED | ÉCHEC |
+| PASSED | RÉUSSI |
 | mandatory | obligatoire |
 | best-practice | bonne pratique |
 | available | disponible |
@@ -288,74 +325,120 @@ Produce the following Markdown report using the language specified by `LANG`. Ev
 | **[Total]** | [n] |
 ```
 
-### HIGH Findings
+### Audited Pages
 
-For each HIGH issue (sorted by `final_score` descending), using translated field labels and SC titles:
-
-```markdown
-## [HIGH Priority Issues | Problèmes de priorité ÉLEVÉE]
-
-### [id] — [sc title in LANG] (CS [sc] [Niveau | Level] [level])
-
-**[Score:]** [final_score]/100
-**[Element:]** `[element snippet]`
-**[Pages affected: | Pages touchées :]** [page_count] — [comma-separated list of pages, max 5, then "...and N more" | "...et N autres"]
-**[Source:]** [source]
-**[Legal: | Référence légale :]** [law_citation]
-**[Jurisdiction signal: | Signal juridictionnel :]** [mandatory | obligatoire] or [best-practice | bonne pratique]
-
-**[Issue: | Problème :]** [descriptive explanation in LANG]
-
-**[Fix: | Correction :]** [fix_hint in LANG from translation table]
-
----
-```
-
-### MEDIUM Findings
+Add this section immediately after the Summary Table. It lists all pages visited during the audit so clients can verify scope.
 
 ```markdown
-## [MEDIUM Priority Issues | Problèmes de priorité MOYENNE]
+## [Audited Pages | Pages auditées]
 
-### [id] — [sc title in LANG] (CS [sc] [Niveau | Level] [level])
-
-**[Score:]** [final_score]/100 | **[Element:]** `[element snippet]` | **[Pages:]** [page_count]
-**[Legal: | Référence légale :]** [law_citation]
-
-**[Fix: | Correction :]** [fix_hint in LANG]
-
----
+| [# | #] | [URL | URL] | [Page Title | Titre de page] | [Status | Statut] |
+|----|-----|------------|---------|
+| 1 | https://example.com/ | Home | ✅ |
+| 2 | https://example.com/about | About | ✅ |
+...
 ```
 
-### LOW Findings
+If PAGE_INVENTORY is empty (Playwright unavailable), show only the SEED_URL row with status ✅ and note "(scanner-only — page title unavailable)".
 
-If ≤10 LOW issues: use the condensed MEDIUM format.
+### Issue Legend
 
-If >10 LOW issues: group by SC:
+Add this immediately before the first issue section. Print it once only, in the language specified by `LANG`:
+
+**English (`LANG: en`):**
+```markdown
+> **A-xxx = reference identifier (use when filing issues with developers). 🔴 CRITICAL = urgent fix required · 🟠 HIGH = priority fix · 🟡 MEDIUM = recommended improvement.**
+```
+
+**French (`LANG: fr`):**
+```markdown
+> **A-xxx = identifiant de référence (à citer avec vos développeurs). 🔴 CRITIQUE = correction urgente · 🟠 ÉLEVÉ = correction prioritaire · 🟡 MOYEN = amélioration recommandée.**
+```
+
+### Issue Card Format (ALL priority levels)
+
+**Issue titles** — replace "Score NN/100" with emoji priority label:
+
+- `final_score ≥ 85` → 🔴 CRITICAL (EN) / 🔴 CRITIQUE (FR)
+- `final_score 60–84` → 🟠 HIGH (EN) / 🟠 ÉLEVÉ (FR)
+- `final_score < 60` → 🟡 MEDIUM (EN) / 🟡 MOYEN (FR)
+
+Title format: `### [id] — [sc title in LANG] (SC [sc] · [Level | Niveau] [level]) · [emoji priority label]`
+
+Use this consistent card structure for **every** issue regardless of priority level:
+
+```markdown
+### A-001 — [sc title in LANG] (SC [sc] · [Level | Niveau] [level]) · 🔴 [CRITICAL | CRITIQUE]
+
+**[WCAG Criterion: | Critère WCAG :]** SC [sc] — [full sc title in LANG] ([Level | Niveau] [level])
+> [One-sentence plain-language description of what the criterion requires — written in LANG]
+
+**[Issue: | Problème détecté :]** [Descriptive explanation of the specific problem found]
+**[Element: | Élément :]** `[HTML snippet or selector, if available]`
+**[Affected pages: | Pages affectées :]** [page_count] [pages | pages] — [comma-separated URLs, max 5, then "...and N more" | "...et N autres"]
+
+**[Legal obligation: | Obligation légale :]** [law_citation from standards-mapper, e.g. "AODA 2005 + IASR O.Reg.191/11 s.14 → WCAG 2.0 AA, SC 1.1.1"]
+
+**[Suggested fix: | Correction suggérée :]** [fix_hint in LANG from translation table]
+```
+
+If the issue was detected by multiple scanners, add at the end of the card (inline, not a standalone line):
+`[Detected by: | Détecté par :] DOM + pa11y` (or whichever sources apply)
+
+**For LOW issues (score < 60) when there are > 10 of them:** use the compact table format instead of full cards:
 
 ```markdown
 ## [LOW Priority Issues | Problèmes de priorité FAIBLE]
 
 [These issues have lower urgency... | Ces problèmes sont moins urgents...]
 
-| CS | [Title | Titre] | [Count | Nombre] | [Fix | Correction] |
-|----|--------|---------|---------|
-| [sc] | [sc title in LANG] | [n] | [fix_hint in LANG] |
+| SC | [Title | Titre] | [Nb | Nb] | [Issues | Enjeux] | [Suggested fix | Correction suggérée] |
+|----|--------|-----|---------|---------|
+| [sc] | [sc title in LANG] | [n] | [A-xxx, A-yyy] | [fix_hint in LANG] |
 ```
 
-### Compliance Lens Table
+Add a note: "Full details available on request." / "Détails complets disponibles sur demande."
+
+### Issue Sections
 
 ```markdown
-## [Compliance Lens | Tableau de conformité]
+## [HIGH Priority Issues | Problèmes de priorité ÉLEVÉE]
+[issue legend — once, before first issue]
+[full cards for each HIGH issue, sorted by final_score descending]
 
-| CS | [Title | Titre] | [Level | Niveau] | [Status | Statut] | [Jurisdiction Signal | Signal juridictionnel] |
-|----|--------|---------|--------|----------------------|
-| 1.1.1 | [sc title in LANG] | A | [FAIL | ÉCHEC] | [mandatory | obligatoire] |
-| 2.4.7 | [sc title in LANG] | AA | [PASS* | RÉUSSI*] | [mandatory | obligatoire] |
+---
+
+## [MEDIUM Priority Issues | Problèmes de priorité MOYENNE]
+[full cards for each MEDIUM issue, sorted by final_score descending]
+
+---
+
+## [LOW Priority Issues | Problèmes de priorité FAIBLE]
+[full cards if ≤10 issues; compact table if >10 issues]
+```
+
+### Compliance Table
+
+Use the jurisdiction-aware title from the Compliance Table Titles translation table.
+
+```markdown
+## [jurisdiction-aware title]
+
+[Compliance table intro sentence in LANG]
+
+| SC | [Title | Titre] | [Level | Niveau] | [Status | Statut] | [Nb | Nb] | [Issues | Enjeux] |
+|----|--------|---------|--------|------|----|
+| 1.1.1 | [sc title in LANG] | A | ❌ [FAILED | ÉCHEC] | 3 | A-001, A-007, A-012 |
+| 2.4.7 | [sc title in LANG] | AA | ✅ [PASSED | RÉUSSI] | 0 | — |
 ```
 
 > [* PASS means no automated failures found... | * RÉUSSI signifie qu'aucun échec automatisé...]
 
-Only include SCs that were checked. Mark SCs with no findings as `PASS*` / `RÉUSSI*`.
+Rules:
+- Only include SCs that were checked
+- Mark SCs with no findings as `✅ [PASSED | RÉUSSI]` with Nb = 0 and Issues = —
+- Mark SCs with findings as `❌ [FAILED | ÉCHEC]` with the count and A-xxx IDs from the issue list
+- Do NOT include a "Jurisdiction Signal" column — the intro sentence explains the legal mapping
 
 ### Manual Verification Gaps
 
@@ -364,7 +447,7 @@ Only include SCs that were checked. Mark SCs with no findings as `PASS*` / `RÉU
 
 [The following WCAG criteria cannot... | Les critères WCAG suivants ne peuvent pas...]
 
-| CS | [Title | Titre] | [Why Manual Testing Is Needed | Pourquoi une vérification manuelle est nécessaire] |
+| SC | [Title | Titre] | [Why Manual Testing Is Needed | Pourquoi une vérification manuelle est nécessaire] |
 |----|--------|----------------------------------|
 | 1.2.1 | [title in LANG] | [reason in LANG] |
 ...
@@ -375,11 +458,22 @@ Only include SCs that were checked. Mark SCs with no findings as `PASS*` / `RÉU
 ```markdown
 ## [Audit Notes | Notes d'audit]
 
-[Include any crawl warnings, scanner failures, degradation notes, or caveats — written in LANG]
+[Include any crawl warnings, scanner failures, sitemap fallback notes, degradation notes, or caveats — written in LANG]
 ```
 
 ---
 
 ## Output
 
-Return the complete Markdown report as your response. Do not wrap it in a code block — output it as raw Markdown so the command can display it directly.
+After generating the full Markdown report:
+
+1. **Save to file** using the Write tool:
+   - Derive `hostname` from `SEED_URL` (e.g., `cima.ca` from `https://www.cima.ca/`)
+   - File path: `./a11y-[hostname]-[AUDIT_DATE].md` (e.g., `./a11y-cima.ca-2026-02-25.md`)
+   - Write the complete report Markdown to this file
+
+2. **Return the report as your response** (raw Markdown, not in a code block)
+
+3. **Print at the very end** (in LANG):
+   - **English:** `Report saved to: ./a11y-[hostname]-[AUDIT_DATE].md`
+   - **French:** `Rapport enregistré dans : ./a11y-[hostname]-[AUDIT_DATE].md`

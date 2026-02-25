@@ -1,6 +1,6 @@
 # perimetre-a11y
 
-**Version:** 1.3.0 — Last updated: 2026-02-25
+**Version:** 1.4.1 — Last updated: 2026-02-25
 
 Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores each issue 0–100, and produces a lean prioritized report. Gracefully degrades when Playwright or scanners are unavailable.
 
@@ -26,37 +26,54 @@ Or install the full marketplace:
 /perimetre-a11y:audit <url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]
 ```
 
+If invoked without a URL, all options are collected interactively with clear preset choices.
+
 **Examples:**
 
 ```bash
-# Basic audit (WCAG 2.2, no jurisdiction citations)
+# Interactive mode — asks URL, language, jurisdiction, and depth
+/perimetre-a11y:audit
+
+# Basic audit (WCAG 2.2, no jurisdiction citations, depth 2)
 /perimetre-a11y:audit https://example.com
 
 # Audit with Ontario AODA citations
 /perimetre-a11y:audit https://example.com --jurisdiction ontario
 
 # Audit with Federal ACA citations, deeper crawl
-/perimetre-a11y:audit https://example.com --jurisdiction federal --depth 15
+/perimetre-a11y:audit https://example.com --jurisdiction federal --depth 10
 
 # Quebec government scope, French report
 /perimetre-a11y:audit https://example.gouv.qc.ca --jurisdiction quebec --lang fr
 
-# French report, global scope
-/perimetre-a11y:audit https://example.com --lang fr
+# Single-page audit (seed URL only)
+/perimetre-a11y:audit https://example.com --depth 1
 ```
+
+**Depth guide:**
+
+| `--depth` | Pages scanned |
+|-----------|--------------|
+| `1` | Seed URL only |
+| `2` | Seed + all direct links on the same domain _(default)_ |
+| `5` | Multi-section crawl |
+| `10` | Deep crawl |
+| `20` | Maximum |
 
 ---
 
 ## Pipeline
 
-The audit runs a 4-stage sequential pipeline:
+The audit runs a 5-stage sequential pipeline:
 
-| Stage | Agent | What it does |
-|-------|-------|-------------|
-| 1 | `web-crawler` | BFS crawl up to 50 pages; runs 13 DOM checks per page via Playwright |
-| 2 | `scanner-runner` | Runs pa11y, axe-core, and Lighthouse against up to 20 pages |
-| 3 | `standards-mapper` | Normalizes findings, maps to WCAG SCs, deduplicates, scores 0–100, adds law citations |
-| 4 | `report-writer` | Produces structured Markdown report with HIGH/MEDIUM/LOW sections |
+| Stage | What it does |
+|-------|-------------|
+| 0 | Argument parsing + interactive collection |
+| 1 | **Pre-flight check** — verifies pa11y, axe, Lighthouse, and Playwright availability before any agents run; offers auto-install if tools are missing |
+| 2 | `web-crawler` — BFS crawl up to 50 pages; runs 13 DOM checks per page via Playwright |
+| 3 | `scanner-runner` — runs pa11y, axe-core, and Lighthouse against up to 20 pages; falls back to sitemap discovery when Playwright is unavailable |
+| 4 | `standards-mapper` — normalizes findings, maps to WCAG SCs, deduplicates, scores 0–100, adds law citations |
+| 5 | `report-writer` — produces structured Markdown report and saves it to `./a11y-[hostname]-[date].md` |
 
 ---
 
@@ -64,12 +81,16 @@ The audit runs a 4-stage sequential pipeline:
 
 1. **Header** — site, date, jurisdiction, standard, scope, scanners used
 2. **Summary table** — HIGH/MEDIUM/LOW counts at a glance
-3. **HIGH findings** — full detail per issue (SC, legal citation, pages affected, element, fix)
-4. **MEDIUM findings** — condensed detail
-5. **LOW findings** — condensed or grouped by SC if > 10 total
-6. **Compliance lens table** — each tested SC with pass/fail and jurisdiction signal
-7. **Manual verification gaps** — WCAG criteria outside automation scope
-8. **Audit notes** — crawl warnings, scanner gaps, degradation notices
+3. **Audited pages** — table of all URLs visited with page titles and status
+4. **Issue legend** — explains A-xxx identifiers and 🔴🟠🟡 priority labels
+5. **HIGH findings** — full card per issue (WCAG criterion, problem, element, affected pages, legal obligation, fix)
+6. **MEDIUM findings** — same full card format
+7. **LOW findings** — full cards (≤10) or compact table grouped by SC (>10)
+8. **Compliance table** — jurisdiction-aware title; each tested SC with pass/fail, issue count, and A-xxx cross-references
+9. **Manual verification gaps** — WCAG criteria outside automation scope
+10. **Audit notes** — crawl warnings, scanner gaps, sitemap fallback notes, degradation notices
+
+Report is saved to `./a11y-[hostname]-[YYYY-MM-DD].md`.
 
 ---
 
@@ -113,9 +134,12 @@ The audit continues producing value even when tools are unavailable:
 
 | Situation | Behaviour |
 |-----------|-----------|
-| Playwright MCP not configured | Skips DOM checks; runs scanner-only audit with warning |
+| Missing CLI tools detected at start | Pre-flight check flags them immediately and offers to auto-install |
+| Playwright MCP not configured | Skips DOM checks; scanner-runner falls back to sitemap discovery for URL list |
+| Sitemap found when Playwright unavailable | Scans up to 20 URLs from sitemap; notes depth parameter had no effect |
+| No sitemap found when Playwright unavailable | Scans seed URL only; notes depth parameter had no effect |
 | All scanners absent (`npx` not found) | Skips scanner stage; runs DOM-only audit with warning |
-| Both unavailable | Reports full degradation and stops |
+| Both unavailable | Pre-flight stops execution (no meaningful audit possible) |
 | Individual scanner missing | Logs the scanner as unavailable; others continue |
 | Page navigation timeout | Logs error; continues crawling remaining pages |
 

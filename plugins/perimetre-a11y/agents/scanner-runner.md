@@ -6,7 +6,7 @@ description: >
   no-scanners status if all three are unavailable.
   <example>Run accessibility scanners against the page inventory for https://example.com. JURISDICTION: federal</example>
 model: sonnet
-tools: [Bash]
+tools: [Bash, WebFetch]
 skills: [wcag-standards]
 color: yellow
 ---
@@ -17,12 +17,25 @@ You will receive:
 - `PAGE_INVENTORY` — JSON array of pages from the crawler (may be empty if Playwright was unavailable)
 - `SEED_URL` — the original seed URL (used as fallback if PAGE_INVENTORY is empty)
 - `JURISDICTION` — the jurisdiction context
+- `PLAYWRIGHT_STATUS` — `available` or `playwright-unavailable`
 
 ## URL Selection
 
-1. If PAGE_INVENTORY is non-empty: take the first 20 URLs with `status: "ok"`
-2. If PAGE_INVENTORY is empty (Playwright unavailable): use `[SEED_URL]` as the only URL
-3. Cap at 20 URLs regardless
+1. If PAGE_INVENTORY is non-empty: take the first 20 URLs with `status: "ok"`. Store as `SCAN_URLS`. Skip to Scanner Execution.
+2. If PAGE_INVENTORY is empty (Playwright unavailable): attempt sitemap discovery before falling back to seed URL only.
+
+### Sitemap Fallback (when PAGE_INVENTORY is empty)
+
+When `PLAYWRIGHT_STATUS` is `playwright-unavailable` and PAGE_INVENTORY is empty:
+
+1. Use WebFetch to attempt `{SEED_URL}/sitemap.xml`
+2. If not found (404 or error), try `{SEED_URL}/sitemap_index.xml`
+3. If a sitemap is found: extract all `<loc>` URLs from the XML. Keep only same-domain URLs (same hostname as SEED_URL). Take up to 20 URLs. Store as `SCAN_URLS`. Set `SITEMAP_SOURCE: sitemap.xml` (or `sitemap_index.xml`).
+4. If no sitemap is found: use `[SEED_URL]` as the only URL. Set `SITEMAP_SOURCE: none`.
+
+Record the discovery method and URL count for the SCANNER NOTES output.
+
+Cap at 20 URLs regardless.
 
 Store the selected URLs as `SCAN_URLS`.
 
@@ -109,5 +122,10 @@ SCANNER FINDINGS
 
 SCANNER NOTES
 =============
-[Scanner availability summary, any errors encountered, degradation notes]
+[Scanner availability summary, any errors encountered, degradation notes.
+
+If sitemap fallback was used, include ONE of these messages (depending on outcome):
+- "Playwright unavailable — depth parameter had no effect. [N] URLs discovered via [sitemap.xml|sitemap_index.xml]."
+- "Playwright unavailable — depth parameter had no effect. No sitemap found at [SEED_URL]/sitemap.xml or [SEED_URL]/sitemap_index.xml. Only seed URL used."
+]
 ```

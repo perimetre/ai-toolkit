@@ -177,9 +177,9 @@ Plugin for WordPress development at Périmètre. Covers PHP coding standards, se
 
 ### `perimetre-a11y`
 
-**Version:** 1.3.0
+**Version:** 1.4.1
 
-Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law, and produces a prioritized report.
+Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law, and produces a prioritized report saved to a file. Includes pre-flight dependency checking, sitemap-based URL discovery when Playwright is unavailable, and consistent issue cards with full context.
 
 **Audience:** Developers and QA engineers who need to audit web properties for WCAG 2.2 compliance and Canadian legal requirements (Federal ACA, Ontario AODA, Quebec SGQRI/Charter). Works in degraded mode when Playwright or scanners are unavailable.
 
@@ -190,14 +190,14 @@ Automated accessibility auditing for web properties. Crawls with Playwright, run
 
 **Commands:**
 
-- `/perimetre-a11y:audit <url> [--jurisdiction global|federal|ontario|quebec] [--depth N]` — Full 4-stage pipeline: crawl → scan → map → report
+- `/perimetre-a11y:audit <url> [--jurisdiction global|federal|ontario|quebec] [--depth N]` — Full 5-stage pipeline: pre-flight → crawl → scan → map → report (saved to `./a11y-[hostname]-[date].md`)
 
 **Agents:**
 
 - `web-crawler` — BFS Playwright crawler with 13 per-page DOM checks (gracefully degrades if Playwright unavailable)
-- `scanner-runner` — pa11y / axe-core / Lighthouse runner, best-effort (degrades if scanners not installed)
+- `scanner-runner` — pa11y / axe-core / Lighthouse runner; falls back to sitemap discovery when Playwright is unavailable
 - `standards-mapper` — Normalizes, deduplicates, scores 0–100, adds law citations
-- `report-writer` — Produces structured HIGH/MEDIUM/LOW Markdown report
+- `report-writer` — Produces structured HIGH/MEDIUM/LOW Markdown report with audited pages table, full issue cards, and jurisdiction-aware compliance table
 
 ---
 

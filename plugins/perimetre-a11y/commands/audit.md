@@ -1,7 +1,7 @@
 ---
 description: "Automated accessibility audit: crawls a web property with Playwright, runs pa11y/axe/Lighthouse, maps findings to WCAG 2.2 and Canadian law, and produces a prioritized HIGH/MEDIUM/LOW report."
 argument-hint: "<url> [--jurisdiction global|federal|ontario|quebec] [--depth N] [--lang en|fr]"
-allowed-tools: [Bash, Task, AskUserQuestion]
+allowed-tools: [Bash, Task, AskUserQuestion, mcp__playwright__browser_navigate, mcp__playwright__browser_close, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_close]
 ---
 
 # Périmètre Accessibility Audit
@@ -14,7 +14,7 @@ Run a full automated accessibility audit on a web property.
 |----------|---------|-------------|
 | `<url>` | _(required)_ | The seed URL to audit (must be http:// or https://) |
 | `--jurisdiction` | `global` | Legal jurisdiction: `global`, `federal`, `ontario`, or `quebec` |
-| `--depth N` | `8` | BFS crawl depth, clamped to 1–20 |
+| `--depth N` | `2` | BFS crawl depth (1 = seed URL only, 2 = seed + direct links, …, max 20) |
 | `--lang` | `en` | Report language: `en` (English) or `fr` (French) |
 
 ---
@@ -25,50 +25,27 @@ There are two modes depending on whether arguments were provided:
 
 ### Mode A — Arguments provided
 
-If any argument was passed to the command, parse them directly:
+If a positional URL argument was passed (e.g. `/perimetre-a11y:audit https://example.com`), parse all flags directly:
 
-1. **Extract URL** — the first non-flag argument. If missing or invalid (must start with `http://` or `https://`), use `AskUserQuestion` to ask for it (see URL question format below). Retry until valid.
+1. **Extract URL** — the first non-flag argument. Must start with `http://` or `https://`. If invalid, stop and report the error.
 2. **Extract jurisdiction** — look for `--jurisdiction <value>`. Valid values: `global`, `federal`, `ontario`, `quebec`. Default: `global`. If an invalid value is provided, default to `global` and warn.
-3. **Extract depth** — look for `--depth <N>`. Parse as integer. Clamp to 1–20. Default: `8`.
+3. **Extract depth** — look for `--depth <N>`. Parse as integer. Clamp to 1–20. Default: `2`.
 4. **Extract language** — look for `--lang <value>`. Valid values: `en`, `fr`. Default: `en`. If an invalid value is provided, default to `en` and warn.
 
-### Mode B — No arguments provided
+### Mode B — No URL provided
 
-If the command was invoked with **no arguments at all**, use `AskUserQuestion` to collect each value interactively in sequence. Do not proceed to Step 1 until all four answers are collected.
+If the command was invoked **without a URL** (no arguments at all, or only flags without a positional URL), collect all four values interactively. Ask all four questions in sequence — do not proceed until all answers are collected.
 
 **Question 1 — URL:**
 ```
 AskUserQuestion(
-  question: "Which URL would you like to audit?",
+  question: "What URL would you like to audit?",
   placeholder: "https://example.com"
 )
 ```
-Validate the answer: must start with `http://` or `https://`. If invalid, ask again with the message: "That doesn't look like a valid URL. Please enter a full URL starting with http:// or https://".
+Validate: must start with `http://` or `https://`. If invalid, ask again: "Please enter a full URL starting with https://".
 
-**Question 2 — Jurisdiction:**
-```
-AskUserQuestion(
-  question: "Which legal jurisdiction applies to this site?",
-  options: [
-    "global — WCAG 2.2 only, no law citations",
-    "federal — ACA 2019 + CAN/ASC-EN 301 549:2024 → WCAG 2.1 AA",
-    "ontario — AODA 2005 + IASR → WCAG 2.0 AA",
-    "quebec — SGQRI 008-02 (gov't) / Charte c.C-12 (private)"
-  ]
-)
-```
-Map the selected option to the value: `global`, `federal`, `ontario`, or `quebec`.
-
-**Question 3 — Crawl depth:**
-```
-AskUserQuestion(
-  question: "How many levels deep should the crawler go? (1–20, default: 8)",
-  placeholder: "8"
-)
-```
-Parse as integer. If empty or non-numeric, use `8`. Clamp to 1–20.
-
-**Question 4 — Report language:**
+**Question 2 — Report language:**
 ```
 AskUserQuestion(
   question: "In which language should the report be written?",
@@ -79,6 +56,35 @@ AskUserQuestion(
 )
 ```
 Map `"English"` → `en`, `"Français"` → `fr`.
+
+**Question 3 — Jurisdiction:**
+```
+AskUserQuestion(
+  question: "Which legal jurisdiction applies to this site?",
+  options: [
+    "None — WCAG 2.2 only, no legal citations",
+    "Federal — ACA 2019 (Canada)",
+    "Ontario — AODA",
+    "Quebec — SGQRI / Charte"
+  ]
+)
+```
+Map: `"None…"` → `global`, `"Federal…"` → `federal`, `"Ontario…"` → `ontario`, `"Quebec…"` → `quebec`.
+
+**Question 4 — Crawl depth:**
+```
+AskUserQuestion(
+  question: "How many pages deep should the crawler go?",
+  options: [
+    "1 — Seed page only",
+    "2 — Seed page + direct links (default)",
+    "5 — Multi-section crawl",
+    "10 — Deep crawl",
+    "20 — Maximum depth"
+  ]
+)
+```
+Extract the leading number from the selected option (e.g. `"2 — …"` → `2`). If none selected or parsing fails, use `2`.
 
 ---
 
@@ -93,12 +99,102 @@ Depth:        [depth]
 Language:     [lang]
 Date:         [audit_date]
 
-Starting pipeline...
+Running pre-flight check...
 ```
 
 ---
 
-## Step 1: Crawl
+## Step 1: Pre-flight Check
+
+Run the following checks **before** launching any agents. This step ensures missing tools are caught immediately rather than discovered mid-audit.
+
+### 1a. Check CLI tools
+
+Run each command and capture whether it succeeds:
+
+```bash
+npx pa11y --version 2>/dev/null && echo "PA11Y_FOUND" || echo "PA11Y_MISSING"
+npx axe --version 2>/dev/null && echo "AXE_FOUND" || echo "AXE_MISSING"
+npx lighthouse --version 2>/dev/null && echo "LH_FOUND" || echo "LH_MISSING"
+```
+
+Parse each result:
+- `*_FOUND` → record version string if captured, status = available
+- `*_MISSING` → status = not found
+
+### 1b. Check Playwright
+
+Attempt `browser_navigate` to `about:blank` using the Playwright MCP tool (either `mcp__playwright__browser_navigate` or `mcp__plugin_playwright_playwright__browser_navigate`). If the tool call succeeds, close the browser with `browser_close` and mark Playwright as available. If the tool is not found or throws an error, mark Playwright as unavailable.
+
+### 1c. Print status table
+
+Print the following table in the chosen language (`LANG`):
+
+**English (`LANG: en`):**
+```
+Pre-flight Check
+================
+| Tool        | Status                        |
+|-------------|-------------------------------|
+| Playwright  | ✅ Available / ❌ Not found   |
+| pa11y       | ✅ v3.x / ❌ Not found        |
+| axe         | ✅ v4.x / ❌ Not found        |
+| Lighthouse  | ✅ v12.x / ❌ Not found       |
+```
+
+**French (`LANG: fr`):**
+```
+Vérification préliminaire
+=========================
+| Outil       | Statut                        |
+|-------------|-------------------------------|
+| Playwright  | ✅ Disponible / ❌ Introuvable |
+| pa11y       | ✅ v3.x / ❌ Introuvable       |
+| axe         | ✅ v4.x / ❌ Introuvable       |
+| Lighthouse  | ✅ v12.x / ❌ Introuvable      |
+```
+
+### 1d. Handle missing tools
+
+If **any** CLI tool is missing (pa11y, axe, Lighthouse):
+
+1. List each missing tool with its install command
+2. If Playwright is also unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
+3. Use `AskUserQuestion` with the message (in `LANG`):
+
+   **English:** "Some accessibility tools are missing. How would you like to proceed?"
+   **French:** "Certains outils d'accessibilité sont manquants. Comment souhaitez-vous procéder ?"
+
+   Options (in `LANG`):
+   - **EN:** "Install automatically (npm install -g pa11y axe-cli lighthouse)" / **FR:** "Installer automatiquement (npm install -g pa11y axe-cli lighthouse)"
+   - **EN:** "Show me the commands — I'll install manually" / **FR:** "Afficher les commandes — je les installerai moi-même"
+   - **EN:** "Continue without these tools (degraded coverage)" / **FR:** "Continuer sans ces outils (couverture réduite)"
+   - **EN:** "Cancel" / **FR:** "Annuler"
+
+   **If user chooses auto-install:**
+   Run `npm install -g pa11y axe-cli lighthouse` (or individual commands for missing tools only). Re-run the version checks. Print updated status table. Then proceed.
+
+   **If user chooses manual install:**
+   Show exact install commands, then **stop** — do not proceed.
+
+   **If user chooses continue:**
+   Prepend a degraded coverage warning to the pipeline output and proceed. Store `PREFLIGHT_DEGRADED: true`.
+
+   **If user cancels:**
+   Stop entirely — do not proceed.
+
+If **all three** CLI tools are unavailable AND Playwright is also unavailable AND user chose continue: **stop** — no meaningful audit is possible without at least one data source.
+
+### 1e. Proceed
+
+After the pre-flight check passes (or user chose to continue with degraded coverage), print:
+
+**English:** `Starting pipeline...`
+**French:** `Démarrage du pipeline...`
+
+---
+
+## Step 2: Crawl
 
 Use the `web-crawler` agent via Task to crawl the web property.
 
@@ -122,11 +218,11 @@ Extract from `CRAWLER_OUTPUT`:
 - `PAGES_CRAWLED` count
 - `CRAWL_NOTES` text
 
-Inform the user: `Step 1 complete — [PAGES_CRAWLED] pages crawled (Playwright: [PLAYWRIGHT_STATUS])`
+Inform the user: `Step 2 complete — [PAGES_CRAWLED] pages crawled (Playwright: [PLAYWRIGHT_STATUS])`
 
 ---
 
-## Step 2: Scan
+## Step 3: Scan
 
 Use the `scanner-runner` agent via Task to run CLI accessibility scanners.
 
@@ -139,6 +235,7 @@ PAGE_INVENTORY:
 
 SEED_URL: [url]
 JURISDICTION: [jurisdiction]
+PLAYWRIGHT_STATUS: [PLAYWRIGHT_STATUS]
 
 Run pa11y, axe, and Lighthouse best-effort for up to 20 URLs.
 ```
@@ -151,11 +248,11 @@ Extract from `SCANNER_OUTPUT`:
 - `SCANNER_FINDINGS` JSON array
 - `SCANNER_NOTES` text
 
-Inform the user: `Step 2 complete — scanners: pa11y=[PA11Y_STATUS] axe=[AXE_STATUS] lighthouse=[LIGHTHOUSE_STATUS]`
+Inform the user: `Step 3 complete — scanners: pa11y=[PA11Y_STATUS] axe=[AXE_STATUS] lighthouse=[LIGHTHOUSE_STATUS]`
 
 ---
 
-## Step 3: Map
+## Step 4: Map
 
 Use the `standards-mapper` agent via Task to normalize, deduplicate, score, and add jurisdiction citations.
 
@@ -186,7 +283,7 @@ Extract from `MAPPER_OUTPUT`:
 - `TOTAL_ISSUES`, `HIGH_COUNT`, `MEDIUM_COUNT`, `LOW_COUNT` counts
 - `MAPPING_NOTES` text
 
-Inform the user: `Step 3 complete — [TOTAL_ISSUES] issues mapped (HIGH: [HIGH_COUNT], MEDIUM: [MEDIUM_COUNT], LOW: [LOW_COUNT])`
+Inform the user: `Step 4 complete — [TOTAL_ISSUES] issues mapped (HIGH: [HIGH_COUNT], MEDIUM: [MEDIUM_COUNT], LOW: [LOW_COUNT])`
 
 ---
 
@@ -231,7 +328,7 @@ couverture scanner.
 
 ---
 
-## Step 4: Report
+## Step 5: Report
 
 Use the `report-writer` agent via Task to produce the final Markdown report.
 
