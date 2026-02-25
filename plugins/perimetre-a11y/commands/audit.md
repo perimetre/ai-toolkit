@@ -62,14 +62,14 @@ Map `"English"` → `en`, `"Français"` → `fr`.
 AskUserQuestion(
   question: "Which legal jurisdiction applies to this site?",
   options: [
-    "None — WCAG 2.2 only, no legal citations",
-    "Federal — ACA 2019 (Canada)",
+    "Global — WCAG 2.2 only, no legal citations",
+    "Federal — ACA 2019, Canada",
     "Ontario — AODA",
     "Quebec — SGQRI / Charte"
   ]
 )
 ```
-Map: `"None…"` → `global`, `"Federal…"` → `federal`, `"Ontario…"` → `ontario`, `"Quebec…"` → `quebec`.
+Map: `"Global…"` → `global`, `"Federal…"` → `federal`, `"Ontario…"` → `ontario`, `"Quebec…"` → `quebec`.
 
 **Question 4 — Crawl depth:**
 ```

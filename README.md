@@ -177,7 +177,7 @@ Plugin for WordPress development at Périmètre. Covers PHP coding standards, se
 
 ### `perimetre-a11y`
 
-**Version:** 1.4.1
+**Version:** 1.4.2
 
 Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law, and produces a prioritized report saved to a file. Includes pre-flight dependency checking, sitemap-based URL discovery when Playwright is unavailable, and consistent issue cards with full context.
 
