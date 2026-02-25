@@ -161,26 +161,37 @@ Vérification préliminaire
 
 ### 1d. Handle missing tools
 
-If **any** CLI tool is missing (pa11y, axe, Lighthouse):
+If **any** tool is missing (pa11y, axe, Lighthouse, or agent-browser):
 
-1. List each missing tool with its install command
-2. If agent-browser is also unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
-3. Use `AskUserQuestion` with the message (in `LANG`):
+1. List **every** missing tool with its install command:
+   - pa11y: `npm install -g pa11y`
+   - axe: `npm install -g axe-cli`
+   - Lighthouse: `npm install -g lighthouse`
+   - agent-browser: `npm install -g @vercel/agent-browser`
+2. If agent-browser is unavailable AND depth > 1: note that the sitemap fallback will be used for URL discovery (depth parameter will have no effect)
+3. Build the auto-install command from **only the missing tools**. Examples:
+   - pa11y + axe missing → `npm install -g pa11y axe-cli`
+   - axe + agent-browser missing → `npm install -g axe-cli @vercel/agent-browser`
+   - all four missing → `npm install -g pa11y axe-cli lighthouse @vercel/agent-browser`
+4. Use `AskUserQuestion` with the message (in `LANG`):
 
    **English:** "Some accessibility tools are missing. How would you like to proceed?"
    **French:** "Certains outils d'accessibilité sont manquants. Comment souhaitez-vous procéder ?"
 
-   Options (in `LANG`):
-   - **EN:** "Install automatically (npm install -g pa11y axe-cli lighthouse)" / **FR:** "Installer automatiquement (npm install -g pa11y axe-cli lighthouse)"
-   - **EN:** "Show me the commands — I'll install manually" / **FR:** "Afficher les commandes — je les installerai moi-même"
+   Options (in `LANG`) — substitute `[INSTALL_CMD]` with the command built in step 3:
+   - **EN:** "Install automatically ([INSTALL_CMD])" / **FR:** "Installer automatiquement ([INSTALL_CMD])"
+   - **EN:** "I'll install manually — show me the commands" / **FR:** "Je vais installer manuellement — afficher les commandes"
    - **EN:** "Continue without these tools (degraded coverage)" / **FR:** "Continuer sans ces outils (couverture réduite)"
    - **EN:** "Cancel" / **FR:** "Annuler"
 
    **If user chooses auto-install:**
-   Run `npm install -g pa11y axe-cli lighthouse` (or individual commands for missing tools only). Re-run the version checks. Print updated status table. Then proceed.
+   Run the `[INSTALL_CMD]` command built in step 3. Re-run the version checks. Print updated status table. Then proceed.
 
    **If user chooses manual install:**
-   Show exact install commands, then **stop** — do not proceed.
+   Show the exact install commands for each missing tool. Then ask again (in `LANG`):
+   - **EN:** "Ready to continue?" / **FR:** "Prêt à continuer ?"
+   - Options — **EN:** "Yes, continue" / "Cancel" · **FR:** "Oui, continuer" / "Annuler"
+   If user confirms, proceed. If user cancels, stop entirely.
 
    **If user chooses continue:**
    Prepend a degraded coverage warning to the pipeline output and proceed. Store `PREFLIGHT_DEGRADED: true`.
