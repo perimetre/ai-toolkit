@@ -77,16 +77,15 @@ Extract the leading number from the selected option. If parsing fails, use `2`.
 
 **Question 4 — URL:**
 
-Use `AskUserQuestion` with a `placeholder` only — **no `options` array**. This renders as a plain text field.
+Use `AskUserQuestion` with this exact question text — do not modify it.
 
 ```
 AskUserQuestion(
-  question: "What is the URL to audit?",
-  placeholder: ""
+  question: "URL :"
 )
 ```
 
-After receiving the answer, validate silently. If invalid, ask again the same way.
+After receiving the answer, validate silently (must start with `http://` or `https://`). If invalid, ask again the same way.
 
 ---
 

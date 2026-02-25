@@ -1,6 +1,6 @@
 # perimetre-a11y
 
-**Version:** 1.4.3 — Last updated: 2026-02-25
+**Version:** 1.4.5 — Last updated: 2026-02-25
 
 Automated accessibility auditing for web properties. Crawls with Playwright, runs pa11y/axe-core/Lighthouse, maps findings to WCAG 2.2 and Canadian jurisdiction law (Federal/Ontario/Quebec), scores each issue 0–100, and produces a lean prioritized report. Gracefully degrades when Playwright or scanners are unavailable.
 
