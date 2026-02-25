@@ -61,6 +61,8 @@ AskUserQuestion(
 Map: `"Global…"` → `global`, `"Federal…"` → `federal`, `"Ontario…"` → `ontario`, `"Quebec…"` → `quebec`.
 
 **Question 3 — Crawl depth:**
+
+If `lang` is `en`, execute this call EXACTLY as written:
 ```
 AskUserQuestion(
   question: "How many pages deep should the crawler go?",
@@ -73,6 +75,21 @@ AskUserQuestion(
   ]
 )
 ```
+
+If `lang` is `fr`, execute this call EXACTLY as written:
+```
+AskUserQuestion(
+  question: "Quelle profondeur d'exploration souhaitez-vous ?",
+  options: [
+    "1 — Page de départ seulement",
+    "2 — Page de départ + liens directs (défaut)",
+    "5 — Exploration multi-sections",
+    "10 — Exploration approfondie",
+    "20 — Profondeur maximale"
+  ]
+)
+```
+
 Extract the leading number from the selected option. If parsing fails, use `2`.
 
 **Question 4 — URL:**
