@@ -1,9 +1,13 @@
 ---
 name: trpc
 description: >
-  Périmètre tRPC patterns for type-safe API development. Use when implementing tRPC
-  routers, procedures, middleware, or reviewing tRPC code. Covers router setup,
-  input validation, context, and error handling with the Périmètre service pattern.
+  Périmètre tRPC patterns for type-safe API development. Use when implementing
+  tRPC routers, procedures, middleware, or reviewing tRPC code. Covers router
+  setup, input validation, context, prefetching, and error handling with the
+  Périmètre service pattern. Triggers on: trpc, tRPC, router(), procedure,
+  useQuery, useMutation, trpc.useUtils(), invalidate, prefetch, HydrateClient,
+  getServerTrpc, authedUserProcedure, loggingProcedure, rateLimitProcedure,
+  RouterOutput, RouterInput, type-safe API, end-to-end types.
 ---
 # tRPC Implementation Guide
 

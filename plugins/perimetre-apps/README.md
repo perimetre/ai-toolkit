@@ -1,6 +1,6 @@
 # perimetre-apps
 
-**Version:** 1.1.0 — Last updated: 2026-02-19
+**Version:** 1.1.1 — Last updated: 2026-03-06
 
 Plugin for JavaScript/TypeScript app development at Périmètre. Covers framework patterns, code review, and planning agents for the full React/Next.js stack.
 

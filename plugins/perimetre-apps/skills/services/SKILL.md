@@ -1,9 +1,13 @@
 ---
 name: services
 description: >
-  Périmètre service layer architecture for Next.js/Node.js apps. Use when building
-  API routes, server actions, business logic layers, or reviewing route/controller code.
-  Covers defineService, service composition, and route delegation patterns.
+  Périmètre service layer architecture for Next.js/Node.js apps. Use when
+  building API routes, server actions, or business logic layers, or reviewing
+  route/controller code. Covers defineService, service composition, dependency
+  injection via deps, and route delegation patterns. Triggers on: defineService,
+  @perimetre/service-builder, service-builder, deps, handler, business logic,
+  service layer, thin routes, service composition, postsService, orderService,
+  userService, analyticsService, service context, service dependencies.
 ---
 # Service Pattern with @perimetre/service-builder
 
