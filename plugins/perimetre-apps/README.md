@@ -1,6 +1,6 @@
 # perimetre-apps
 
-**Version:** 1.1.1 — Last updated: 2026-03-06
+**Version:** 1.2.0 — Last updated: 2026-03-06
 
 Plugin for JavaScript/TypeScript app development at Périmètre. Covers framework patterns, code review, and planning agents for the full React/Next.js stack.
 
@@ -14,6 +14,7 @@ Developers building apps and prototypes with the Périmètre JS/TS/React/Next.js
 
 | Skill | What it covers |
 |-------|----------------|
+| `auth` | Authentication — Logto (default), Auth.js, Clerk; session management, tRPC auth middleware, route protection |
 | `error-handling` | Error-as-values pattern using discriminated unions — custom error classes, `ok`/`error` returns, no thrown exceptions |
 | `services` | Service layer architecture — `defineService`, route delegation, separation of concerns |
 | `trpc` | tRPC routers, procedures, middleware, and Périmètre conventions |
